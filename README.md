@@ -43,12 +43,36 @@ omega
 
 ```
 
-## Installing Example Applicationn
+## Installing Example Application
 
 Install **Omega** by running the following command:
 
 ```sh
 composer create-project omegamvc/omega omega
+```
+
+> This command does not download the dependencies listed in require-dev due to the .gitattributes settings. If you want to work with the complete source code, consider the options below.
+
+### Cloning the repository
+
+If you prefer to work directly with the full source code, clone the repository:
+
+```sh
+git clone https://github.com/omegamvc/omega.git
+```
+
+After cloning, install all dependencies, including development ones, with:
+
+```sh
+composer install
+```
+
+### Option --prefer-source
+
+If you want to install the project while keeping the source code and dependencies for easier debugging or development, use the --prefer-source option:
+
+```sh
+composer create-project omegamvc/omega omega --prefer-source
 ```
 
 ## Configuration
@@ -162,50 +186,6 @@ composer db_fresh
 
 > In the case of `mysql/mariadb`, the database will be created automatically, and there is no need to create it manually.
 
-You can add custom migrations with the experimental `php omega migrate --update` command. Use it cautiously and only if you are confident in its effects.
-
-To create a migration, simply create a new class in `PROJECT_ROOT/database/migrations/schemas` with an incremented number.
-
-```php
-// File name: 007_MyTable.php
-
-declare(strict_types=1);
-
-namespace Database\Migrations\Schemes;
-
-use Omega\Database\Adapter\AbstractDatabaseAdapter;
-
-class MyTable
-{
-    public string $table = 'my_table';
-
-    public function up(AbstractDatabaseAdapter $connection): void
-    {
-        $table = $connection->createTable('my_table');
-        $table->id('id');
-        $table->text('my_column_name');
-        $table->execute();
-    }
-
-    public function down(AbstractDatabaseAdapter $connection): void
-    {
-        $query = "DROP TABLE IF EXISTS `{$this->table}`";
-        $connection->pdo()->prepare($query)->execute();
-    }
-}
-```
-
-After creating the migration, you need to run the command:
-
-```sh
-composer dump-autoload
-```
-
-Then run the migration:
-
-```sh
-php omega migrate --update
-```
 
 ## Analysis
 
@@ -284,13 +264,13 @@ The `serve` command can be customized by modifying the `.env` file:
 
 ```sh
 APP_HOST=server_name_or_ip
-APP_PORT=port
+APP_PORT=port_number
 ```
 
 Alternatively, you can pass the address and port of your server to the serve command.
 
 ```sh
-composer serve --host=server_name_or_ip --port=port
+composer serve --host=server_name_or_ip --port=port_number
 ```
 
 ## Additional Configuration and Setup Notes
@@ -340,12 +320,12 @@ This configuration serves as a good starting point for both development and prod
 
 #### PHPCS (Code Sniffer)
 
-The `phpcs.xml.dist` file is preconfigured to save the cache in the `.cache/phpcs` directory at the root of the project. If this directory does not exist, Code Sniffer cannot create it automatically, and you will need to create it manually.
+The `phpcs.xml.dist` file is preconfigured to save the cache in the `cache/phpcs` directory at the root of the project. If this directory does not exist, Code Sniffer cannot create it automatically, and you will need to create it manually.
 
 To disable the cache, you can simply comment out or remove this line from the `phpcs.xml.dist` file.
 
 ```xml
-<arg name="cache" value=".cache/phpcs" />
+<arg name="cache" value="cache/phpcs" />
 ```
 
 If you prefer to choose a custom path that better suits your habits, you can simply modify it.
