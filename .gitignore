@@ -3,6 +3,7 @@ cache/
 .idea/
 node_modules/
 vendor/
+.vscode/
 composer.lock
 .env
 package-lock.json
