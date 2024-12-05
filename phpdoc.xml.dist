@@ -6,8 +6,7 @@
         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/phpDocumentor/phpDocumentor/master/data/xsd/phpdoc.xsd"
 >
     <title>Omega API</title>
-    <setting name="guides.enabled" value="false" />
-    <setting name="graphs.enabled" value="false" />
+    <setting name="guides.enabled" value="false"/>
     <paths>
         <output>cache/apiDoc</output>
         <cache>cache/phpdoc</cache>
