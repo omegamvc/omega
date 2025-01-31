@@ -54,6 +54,9 @@ return [
      */
     'timezone'  => 'Europe/Rome',
 
+    'env_file' => '.env',
+    'envitonment' => 'production',
+
     /**
      * Array of ServiceProviders.
      */

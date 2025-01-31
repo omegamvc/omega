@@ -55,7 +55,7 @@ class ShowHomePageController
                 Cache::put($key, Router::route('view-product', [ 'product' => $product->id ]));
             }
 
-            $product->rsoute = Cache::get($key);
+            $product->route = Cache::get($key);
 
             return $product;
         }, $products);

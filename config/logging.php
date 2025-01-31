@@ -12,6 +12,7 @@
 declare(strict_types=1);
 
 use Omega\Logging\LogLevel;
+use OMega\Utils\Path;
 
 /**
  * Return an array of configuration for logger.
@@ -34,7 +35,7 @@ return [
     'default' => 'stream',
     'stream'  => [
         'type'    => 'stream',
-        'path'    => get_storage_path('logs/omega.log'),
+        'path'    => Path::getPath('storage', 'logs/omega.log'),
         'minimum' => LogLevel::DEBUG,
         'options' => [
             /**

@@ -11,6 +11,8 @@
 
 declare(strict_types=1);
 
+use Omega\Utils\Path;
+
 /**
  * Return an array of database configuration parameters.
  *
@@ -52,6 +54,6 @@ return [
     ],
     'sqlite'  => [
         'type' => 'sqlite',
-        'path' => get_database_path('sqlite/database.sqlite'),
+        'path' => Path::getPath('database', 'sqlite/database.sqlite'),
     ],
 ];

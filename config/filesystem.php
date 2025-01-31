@@ -11,6 +11,8 @@
 
 declare(strict_types=1);
 
+use Omega\Utils\Path;
+
 /**
  * Return an array of filesystem configuration parameters.
  *
@@ -48,7 +50,7 @@ return [
      */
     'local' => [
         'type' => 'local',
-        'path' => get_storage_path('app'),
+        'path' => Path::getPath('app'),
     ],
     's3' => [
         'type'    => 's3',

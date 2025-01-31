@@ -11,6 +11,8 @@
 
 declare(strict_types=1);
 
+use Omega\Application\Path;
+
 //define('OMEGA_START', microtime(true));
 
 /**
