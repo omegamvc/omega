@@ -17,6 +17,7 @@ namespace App\Http\Controllers\Users;
 
 use Exception;
 use App\Models\User;
+use Omega\Facade\Facades\Csrf;
 use Omega\Facade\Facades\View;
 
 /**
@@ -42,7 +43,8 @@ class UpdateUserDetailsController
     public function handle(): \Omega\View\View
     {
         session();
-        secure();
+
+        Csrf::validateToken($_POST['csrf']);
 
         $data = [
             'user_id'  => $_POST['user_id'],

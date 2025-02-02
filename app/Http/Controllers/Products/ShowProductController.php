@@ -17,6 +17,7 @@ namespace App\Http\Controllers\Products;
 
 use Exception;
 use App\Models\Product;
+use Omega\Facade\Facades\Csrf;
 use Omega\Facade\Facades\Router;
 use Omega\Facade\Facades\View;
 
@@ -51,7 +52,7 @@ class ShowProductController
             'orderAction' => Router::route('order-product', [
                 'product' => $product->id,
             ]),
-            'csrf' => csrf(),
+            'csrf' => Csrf::generateToken(),
         ]);
     }
 }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 use Omega\Config\ServiceProvider\ConfigServiceProvider;
 use Omega\Cache\ServiceProvider\CacheServiceProvider;
+use Omega\Csrf\ServiceProvider\CsrfServiceProvider;
 use Omega\Database\ServiceProvider\DatabaseServiceProvider;
 use Omega\Filesystem\ServiceProvider\FilesystemServiceProvider;
 use Omega\Http\ServiceProvider\ResponseServiceProvider;
@@ -23,6 +24,7 @@ use Omega\Session\ServiceProvider\SessionServiceProvider;
 use Omega\Validation\ServiceProvider\ValidationServiceProvider;
 use Omega\View\ServiceProvider\ViewServiceProvider;
 use Omega\Facade\Facades\Cache;
+use Omega\Facade\Facades\Csrf;
 use Omega\Facade\Facades\Config;
 use Omega\Facade\Facades\Database;
 use Omega\Facade\Facades\Filesystem;
@@ -54,15 +56,13 @@ return [
      */
     'timezone'  => 'Europe/Rome',
 
-    'env_file' => '.env',
-    'envitonment' => 'production',
-
     /**
      * Array of ServiceProviders.
      */
     'providers' => [
         ConfigServiceProvider::class,
         CacheServiceProvider::class,
+        CsrfServiceProvider::class,
         DatabaseServiceProvider::class,
         //\Omega\Email\ServiceProvider\EmailServiceProvider::class,
         FilesystemServiceProvider::class,
@@ -81,6 +81,7 @@ return [
     'facades'   => [
         'Config'     => Config::class,
         'Cache'      => Cache::class,
+        'Csrf'       => Csrf::class,
         'Database'   => Database::class,
         //'Email' => \Omega\Facade\Facades\Email::class,
         'Filesystem' => Filesystem::class,

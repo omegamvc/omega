@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Users;
 
 use Exception;
+use Omega\Facade\Facades\Csrf;
 use Omega\Facade\Facades\Router;
 use Omega\Facade\Facades\View;
 
@@ -43,7 +44,7 @@ class ShowLoginFormController
     {
         return View::render('users/login', [
             'logInAction' => Router::route('log-in-user'),
-            'csrf'        => csrf(),
+            'csrf'        => Csrf::generateToken(),
         ]);
     }
 }

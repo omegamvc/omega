@@ -17,6 +17,7 @@ namespace App\Http\Controllers\Products;
 
 use Exception;
 use App\Models\Order;
+use Omega\Facade\Facades\Csrf;
 use Omega\Facade\Facades\Response;
 use Omega\Facade\Facades\Router;
 use Omega\Facade\Facades\Session;
@@ -43,7 +44,7 @@ class OrderProductController
      */
     public function handle(): \Omega\Http\Response
     {
-        secure();
+        Csrf::validateToken($_POST['csrf']);
 
         $data = [
             'user_id'    => Session::get('user_id'),

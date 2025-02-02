@@ -17,6 +17,7 @@ namespace App\Http\Controllers\Users;
 
 use Exception;
 use App\Models\User;
+use Omega\Facade\Facades\Csrf;
 use Omega\Facade\Facades\Response;
 use Omega\Facade\Facades\Router;
 use Omega\Facade\Facades\Session;
@@ -46,7 +47,7 @@ class LogInUserController
      */
     public function handle(): \Omega\Http\Response
     {
-        secure();
+        Csrf::validateToken($_POST['csrf']);
 
         $data = Validation::validate($_POST, [
             'email'    => ['required', 'email'],

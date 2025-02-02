@@ -17,6 +17,7 @@ namespace App\Http\Controllers\Users;
 
 use Exception;
 use App\Models\User;
+use Omega\Facade\Facades\Csrf;
 use Omega\Facade\Facades\Router;
 use Omega\Facade\Facades\Session;
 use Omega\Facade\Facades\View;
@@ -50,7 +51,7 @@ class UserDetailsController
             'user'                 => $user,
             'updateDetailsAction'  => Router::route('update-details'),
             'changePasswordAction' => Router::route('change-password'),
-            'csrf'                 => csrf(),
+            'csrf'                 => Csrf::generateToken(),
         ]);
     }
 }

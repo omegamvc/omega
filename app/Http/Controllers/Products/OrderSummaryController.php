@@ -18,6 +18,7 @@ namespace App\Http\Controllers\Products;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
+use Omega\Facade\Facades\Csrf;
 use Omega\Facade\Facades\Router;
 use Omega\Facade\Facades\Session;
 use Omega\Facade\Facades\View;
@@ -52,7 +53,7 @@ class OrderSummaryController
             'order'        => $order,
             'deleteAction' => Router::route('delete-product'),
             'buyAction'    => Router::route('buy-product'),
-            'csrf'         => csrf(),
+            'csrf'         => Csrf::generateToken(),
         ]);
     }
 }

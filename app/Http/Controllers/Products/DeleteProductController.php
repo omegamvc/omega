@@ -41,7 +41,7 @@ class DeleteProductController
      */
     public function handle(): \Omega\View\View
     {
-        session();
+        ession();
 
         $order_id = $_POST['order_id'];
 

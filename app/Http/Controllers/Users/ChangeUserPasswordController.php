@@ -45,7 +45,8 @@ class ChangeUserPasswordController
     public function handle(): \Omega\View\View
     {
         session();
-        secure();
+
+        Csrf::validateToken($_POST['csrf']);
 
         $data = [
             'user_id'     => $_POST['user_id'],

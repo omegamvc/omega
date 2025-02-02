@@ -17,6 +17,7 @@ namespace App\Http\Controllers\Products;
 
 use Exception;
 use App\Models\Order;
+use Omega\Facade\Facades\Csrf;
 use Omega\Facade\Facades\View;
 
 /**
@@ -42,7 +43,8 @@ class BuyProductController
     public function handle(): \Omega\View\View
     {
         session();
-        secure();
+
+        Csrf::validateToken($_POST['csrf']);
 
         $order_id = $_POST['order_id'];
         $order    = Order::where('id', $order_id)->first();
