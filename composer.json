@@ -22,7 +22,7 @@
     "lightweight"
   ],
   "require": {
-    "php": ">=8.2",
+    "php": ">=8.3",
     "omegamvc/framework": "^1.0.0",
     "omegamvc/serializable-closure": "^1.0.0"
   },
