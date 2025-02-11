@@ -32,10 +32,14 @@ return [
      * explicit specified when executing a given config function.
      */
     'default'   => env('CACHE_DRIVER', 'file'),
+    'apcu'      => [
+        'type'    => 'apcu',
+        'seconds' => env('CACHE_SECONDS', '31536000'), // TTL predefinito (1 anno)
+    ],
     'file'      => [
         'type'    => 'file',
         'seconds' => env('CACHE_SECONDS', '31536000'),
-        //'locking' => false,
+        'locking' => true,
         'path'    => Path::getPath('storage', 'framework/data/cache'),
     ],
     'memcached' => [

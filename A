@@ -1,0 +1,149 @@
+class FileAdapter extends AbstractCacheItemPool
+{
+    public function __construct(mixed $options = [])
+    {
+        if (!isset($options['path'])){
+            throw new InvalidArgumentException(
+                'The path option must be set.'
+            );
+        }
+
+        $this->checkFilePath($options['path']);
+
+        parent::__construct($options);
+    }
+
+    public function clear(): bool
+    {
+        $filePath = $this->options['path'];
+        $this->checkFilePath($filePath);
+
+        $iterator = new RegexIterator(
+            new RecursiveIteratorIterator(
+                new RecursiveDirectoryIterator($filePath)
+            ),
+            '/\.data$/i'
+        );
+
+        foreach ($iterator as $file) {
+            if ($file->isFile()) {
+                @unlink($file->getRealPath());
+            }
+        }
+
+        return true;
+    }
+
+    public function getItem(string $key): CacheItemInterface
+    {
+        if (!$this->hasItem($key)) {
+            return new Item($key);
+        }
+
+        $resource = @fopen($this->fetchStreamUri($key), 'rb');
+
+        if (!$resource) {
+            throw new RuntimeException(
+                sprintf(
+                    'Unable to fetch cache entry for %s.  Cannot open the resource.',
+                    $key
+                )
+            );
+        }
+
+        $data = stream_get_contents($resource);
+        fclose($resource);
+
+        $item = new Item($key);
+        $information = unserialize($data);
+
+        if ($information[1] !== null && time() > $information[1]) {
+            if (!$this->deleteItem($key)) {
+                throw new RuntimeException(
+                    sprintf(
+                        'Unable to clean expired cache entry for %s.',
+                        $key
+                    )
+                );
+            }
+
+            return $item;
+        }
+
+        $item->set($information[0]);
+
+        return $item;
+    }
+
+    public function deleteItem(string $key): bool
+    {
+        if ($this->hasItem($key)) {
+            return @unlink($this->fetchStreamUri($key));
+        }
+
+        return true;
+    }
+
+    public function save(CacheItemInterface $item): bool
+    {
+        $fileName = $this->fetchStreamUri($item->getKey());
+        $filePath = pathinfo($fileName, PATHINFO_DIRNAME);
+
+        if (!is_dir($filePath)) {
+            mkdir($filePath, 0770, true);
+        }
+
+        if ($item instanceof HasExpirationDateInterface) {
+            $contents = serialize([$item->get(), time() + $this->convertItemExpiryToSeconds($item)]);
+        } else {
+            $contents = serialize([$item->get(), null]);
+        }
+
+        return (bool) file_put_contents($fileName, $contents);
+    }
+
+    public function hasItem(string $key): bool
+    {
+        return is_file($this->fetchStreamUri($key));
+    }
+
+    public static function isSupported(): bool
+    {
+        return true;
+    }
+
+    private function checkFilePath(string $filePath): bool
+    {
+        if (!is_dir($filePath)) {
+            throw new RuntimeException(
+                sprintf(
+                    'The base cache path `%s` does not exist.',
+                    $filePath
+                )
+            );
+        }
+
+        if (!is_writable($filePath)) {
+            throw new RuntimeException(
+                sprintf(
+                    'The base cache path `%s` is not writable.',
+                    $filePath
+                )
+            );
+        }
+
+        return true;
+    }
+
+    private function fetchStreamUri(string $key): string
+    {
+        $filePath = $this->options['path'];
+        $this->checkFilePath($filePath);
+
+        return sprintf(
+            '%s/%s.json',
+            rtrim($filePath, '/'),
+            hash('md5', $key)
+        );
+    }
+}
