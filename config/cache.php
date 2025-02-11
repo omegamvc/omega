@@ -31,20 +31,27 @@ return [
      * using this caching library. This connection is used when another is not
      * explicit specified when executing a given config function.
      */
-    'default'  => env('CACHE_DRIVER', 'file'),
-    'memory'   => [
-        'type'    => 'memory',
-        'seconds' => env('CACHE_SECONDS', '31536000'),
-    ],
-    'file'     => [
+    'default'   => env('CACHE_DRIVER', 'file'),
+    'file'      => [
         'type'    => 'file',
         'seconds' => env('CACHE_SECONDS', '31536000'),
+        //'locking' => false,
         'path'    => Path::getPath('storage', 'framework/data/cache'),
     ],
-    'memcache' => [
-        'type'    => 'memcache',
+    'memcached' => [
+        'type'    => 'memcached',
         'host'    => env('MEMCACHE_HOST', '127.0.0.1'),
         'port'    => env('MEMCACHE_PORT', '11211'),
         'seconds' => env('CACHE_SECONDS', '31536000'),
     ],
+    'memory'    => [
+        'type'    => 'memory',
+        'seconds' => env('CACHE_SECONDS', '31536000'),
+    ],
+    'redis'     => [
+        'type'    => 'redis',
+        'host'    => env('REDIS_HOST', '127.0.0.1'),
+        'port'    => env('REDIS_PORT', '6379'),
+        'seconds' => env('CACHE_SECONDS', '31536000'),
+    ]
 ];

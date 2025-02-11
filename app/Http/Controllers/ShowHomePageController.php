@@ -51,14 +51,14 @@ class ShowHomePageController
         $productsWithRoutes = array_map(function ($product) {
             $key = "route-for-product-{$product->id}";
 
-            if (!Cache::has($key)) {
-                Cache::put($key, Router::route('view-product', [ 'product' => $product->id ]));
+            if (!Cache::hasItem($key)) {
+                Cache::set($key, Router::route('view-product', [ 'product' => $product->id ]));
             }
 
-            $product->route = Cache::get($key);
+            $product->route = Cache::getItem($key);
 
             return $product;
-        }, $products);
+        }, (array) $products);
 
         return View::render('home', [
             'user_id'  => $user_id,
