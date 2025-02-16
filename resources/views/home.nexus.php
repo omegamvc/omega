@@ -21,7 +21,7 @@
                 <a href="{{ $product->route }}" class="bg-indigo-500 rounded-lg p-2 text-white">
                     Order
                 </a>
-            @endif       
+            @endif
         </div>
     </div>
 @endforeach
