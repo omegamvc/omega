@@ -36,6 +36,11 @@ return [
         'type'    => 'apcu',
         'seconds' => env('CACHE_SECONDS', '31536000'), // TTL predefinito (1 anno)
     ],
+    'database'  => [
+        'type'    => 'database',
+        'table'   => env('DATABASE_CACHE_TABLE', 'omega_cache'),
+        'seconds' => env('CACHE_SECONDS', '31536000'),
+    ],
     'file'      => [
         'type'    => 'file',
         'seconds' => env('CACHE_SECONDS', '31536000'),

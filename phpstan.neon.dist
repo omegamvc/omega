@@ -3,7 +3,7 @@ parameters:
 	paths:
 		- app/Http
 		- app/Models
-		- app/Exceptions
+		- app/Exception
 		- routes
 		- tests
 		- vendor/omegamvc

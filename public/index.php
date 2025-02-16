@@ -11,9 +11,7 @@
 
 declare(strict_types=1);
 
-use Omega\Application\Path;
-
-//define('OMEGA_START', microtime(true));
+define('OMEGA_START', microtime(true));
 
 /**
  * Register the autoload.

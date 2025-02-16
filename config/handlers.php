@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-use App\Exceptions\Handler;
+use App\Exception\Handler;
 
 /**
  * Return an array of exceptions handler.

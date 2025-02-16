@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Part of Omega CMS - App/Exceptions Package
+ * Part of Omega CMS - App/Exception Package
  * php version 8.3
  *
  * @link      https://omegamvc.github.io
@@ -13,16 +13,16 @@
 
 declare(strict_types=1);
 
-namespace App\Exceptions;
+namespace App\Exception;
 
 use Throwable;
-use Omega\Exceptions\ExceptionHandler;
+use Omega\Exception\ExceptionHandler;
 
 /**
  * Exception handler class.
  *
  * @category    App
- * @package     App\Exceptions
+ * @package     Exception
  * @link        https://omegamvc.github.io
  * @author      Adriano Giovannini <agisoftt@gmail.com>
  * @copyright   Copyright (c) 2024 - 2025 Adriano Giovannini (https://omegamvc.github.io)

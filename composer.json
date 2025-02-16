@@ -31,6 +31,7 @@
     "ext-zip": "*",
     "ext-bz2": "*",
     "ext-pcntl": "*",
+    "ext-simplexml": "*",
     "omegamvc/framework": "^1.0.0",
     "omegamvc/serializable-closure": "^1.0.0",
     "psr/cache": "^3.0",
