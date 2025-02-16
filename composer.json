@@ -33,10 +33,7 @@
     "ext-pcntl": "*",
     "ext-simplexml": "*",
     "omegamvc/framework": "^1.0.0",
-    "omegamvc/serializable-closure": "^1.0.0",
-    "psr/cache": "^3.0",
-    "psr/simple-cache": "^3.0",
-    "psr/container": "^2.0"
+    "omegamvc/serializable-closure": "^1.0.0"
   },
   "require-dev": {
     "phpstan/phpstan": "^1.12",

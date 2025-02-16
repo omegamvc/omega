@@ -44,7 +44,6 @@ return [
     'file'      => [
         'type'    => 'file',
         'seconds' => env('CACHE_SECONDS', '31536000'),
-        'locking' => true,
         'path'    => Path::getPath('storage', 'framework/data/cache'),
     ],
     'memcached' => [

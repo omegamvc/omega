@@ -15,7 +15,7 @@
                 {!! $product->description !!}
             </p>
             <p class="text-xl my-4">
-                Price: $ {!$product->price !}
+                Price: $ {! $product->price !}
             </p>
             @if(isset($_SESSION['user_id']))
                 <a href="{{ $product->route }}" class="bg-indigo-500 rounded-lg p-2 text-white">
