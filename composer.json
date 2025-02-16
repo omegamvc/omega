@@ -39,7 +39,6 @@
     "psr/container": "^2.0"
   },
   "require-dev": {
-    "filp/whoops": "^2.15",
     "phpstan/phpstan": "^1.12",
     "phpunit/phpunit": "^11.4",
     "squizlabs/php_codesniffer": "^3.11"
