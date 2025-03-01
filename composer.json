@@ -23,6 +23,7 @@
   ],
   "require": {
     "php": ">=8.3",
+    "ext-apcu": "*",
     "ext-fileinfo": "*",
     "ext-ftp": "*",
     "ext-mbstring": "*",
@@ -32,12 +33,13 @@
     "ext-bz2": "*",
     "ext-pcntl": "*",
     "ext-simplexml": "*",
+    "ext-redis": "*",
     "omegamvc/framework": "^1.0.0",
     "omegamvc/serializable-closure": "^1.0.0"
   },
   "require-dev": {
-    "phpstan/phpstan": "^1.12",
-    "phpunit/phpunit": "^11.4",
+    "phpstan/phpstan": "^2.1",
+    "phpunit/phpunit": "^12.0",
     "squizlabs/php_codesniffer": "^3.11"
   },
   "autoload": {

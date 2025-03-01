@@ -51,6 +51,7 @@ return [
         'database' => env('DB_DATABASE', 'omega'),
         'username' => env('DB_USERNAME', 'root'),
         'password' => env('DB_PASSWORD', 'vb65ty4'),
+        'charset'  => env('DB_CHARSET', 'utf8mb4'),
     ],
     'sqlite'  => [
         'type' => 'sqlite',

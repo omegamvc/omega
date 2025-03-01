@@ -34,23 +34,23 @@ return [
     'default'   => env('CACHE_DRIVER', 'file'),
     'apcu'      => [
         'type'    => 'apcu',
-        'seconds' => env('CACHE_SECONDS', '31536000'), // TTL predefinito (1 anno)
+        'seconds' => (int) env('CACHE_SECONDS', '31536000'), // TTL predefinito (1 anno)
     ],
     'database'  => [
         'type'    => 'database',
         'table'   => env('DATABASE_CACHE_TABLE', 'omega_cache'),
-        'seconds' => env('CACHE_SECONDS', '31536000'),
+        'seconds' => (int) env('CACHE_SECONDS', '31536000'),
     ],
     'file'      => [
         'type'    => 'file',
-        'seconds' => env('CACHE_SECONDS', '31536000'),
+        'seconds' => (int) env('CACHE_SECONDS', '31536000'),
         'path'    => Path::getPath('storage', 'framework/data/cache'),
     ],
     'memcached' => [
         'type'    => 'memcached',
-        'host'    => env('MEMCACHE_HOST', '127.0.0.1'),
-        'port'    => env('MEMCACHE_PORT', '11211'),
-        'seconds' => env('CACHE_SECONDS', '31536000'),
+        'host'    => (string) env('MEMCACHE_HOST', '127.0.0.1'),
+        'port'    => (int) env('MEMCACHE_PORT', '11211'),
+        'seconds' => (int) env('CACHE_SECONDS', '31536000'),
     ],
     'memory'    => [
         'type'    => 'memory',
@@ -58,8 +58,8 @@ return [
     ],
     'redis'     => [
         'type'    => 'redis',
-        'host'    => env('REDIS_HOST', '127.0.0.1'),
-        'port'    => env('REDIS_PORT', '6379'),
-        'seconds' => env('CACHE_SECONDS', '31536000'),
+        'host'    => (string) env('REDIS_HOST', '127.0.0.1'),
+        'port'    => (int) env('REDIS_PORT', '6379'),
+        'seconds' => (int) env('CACHE_SECONDS', '31536000'),
     ]
 ];
