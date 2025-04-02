@@ -178,7 +178,7 @@ Here's what each parameter means:
 Example of custom database path:
 
 ```php
-use Omega\Utils\Path;
+use Omega\Support\Path;
 
 'path' => Path::getPath('yout_custom_databae__path', 'your_custom_sqlite_path/database.sqlite')
 ```

@@ -53,17 +53,17 @@ return function () {
 
     Router::get(
         '/',
-        [ ShowHomePageController::class, 'handle'],
+        [ShowHomePageController::class, 'handle'],
     )->name('show-home-page');
 
     Router::get(
         '/products/view/{product}',
-        [ ShowProductController::class, 'handle'],
+        [ShowProductController::class, 'handle'],
     )->name('view-product');
 
     Router::post(
         '/products/order/{product}',
-        [ OrderProductController::class, 'handle'],
+        [OrderProductController::class, 'handle'],
     )->name('order-product');
 
     Router::get(
@@ -73,17 +73,17 @@ return function () {
 
     Router::post(
         '/products/buy-product',
-        [ BuyProductController::class, 'handle']
+        [BuyProductController::class, 'handle']
     )->name('buy-product');
 
     Router::post(
         '/products/delete-product',
-        [ DeleteProductController::class, 'handle']
+        [DeleteProductController::class, 'handle']
     )->name('delete-product');
 
     Router::get(
         '/register',
-        [ ShowRegisterFormController::class, 'handle'],
+        [ShowRegisterFormController::class, 'handle'],
     )->name('show-register-form');
 
     Router::get(
@@ -126,8 +126,8 @@ return function () {
         [new UpdateUserDetailsController(), 'handle']
     )->name('update-details');
 
-     Router::post(
-         '/user/change',
-         [new ChangeUserPasswordController(), 'handle']
-     )->name('change-password');
+    Router::post(
+        '/user/change',
+        [new ChangeUserPasswordController(), 'handle']
+    )->name('change-password');
 };

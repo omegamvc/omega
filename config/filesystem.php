@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-use Omega\Utils\Path;
+use Omega\Support\Path;
 
 /**
  * Return an array of filesystem configuration parameters.

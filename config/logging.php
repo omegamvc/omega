@@ -12,7 +12,7 @@
 declare(strict_types=1);
 
 use Omega\Logging\LogLevel;
-use OMega\Utils\Path;
+use OMega\Support\Path;
 
 /**
  * Return an array of configuration for logger.
