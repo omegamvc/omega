@@ -18,3 +18,5 @@ Thumbs.db
 *.txt
 *.swo
 *.swp
+
+!storage/framework/data/cache/
