@@ -18,8 +18,8 @@ namespace App\Http\Controllers\Users;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
-use Omega\Facade\Facades\Session;
-use Omega\Facade\Facades\View;
+use Omega\Support\Facade\Facades\Session;
+use Omega\Support\Facade\Facades\View;
 
 /**
  * User order controller.

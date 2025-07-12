@@ -17,8 +17,8 @@ namespace App\Http\Controllers\Users;
 
 use Exception;
 use App\Models\User;
-use Omega\Facade\Facades\Csrf;
-use Omega\Facade\Facades\View;
+use Omega\Support\Facade\Facades\Csrf;
+use Omega\Support\Facade\Facades\View;
 
 use function password_verify;
 use function password_hash;

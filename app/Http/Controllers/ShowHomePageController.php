@@ -17,10 +17,10 @@ namespace App\Http\Controllers;
 
 use Exception;
 use App\Models\Product;
-use Omega\Facade\Facades\Cache;
-use Omega\Facade\Facades\Router;
-use Omega\Facade\Facades\Session;
-use Omega\Facade\Facades\View;
+use Omega\Support\Facade\Facades\Cache;
+use Omega\Support\Facade\Facades\Router;
+use Omega\Support\Facade\Facades\Session;
+use Omega\Support\Facade\Facades\View;
 
 use function array_map;
 

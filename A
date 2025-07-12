@@ -1,0 +1,114 @@
+Comparazione tra i miei metoi e quelli dlla classe string.
+
+// mb_lowercase
+```
+// Mio metodo
+public static function lower(string $value): string
+{
+    return mb_strtolower($value, 'UTF-8');
+}
+
+// Metodo della classe Str
+public static function toLowerCase(string $text)
+{
+    return mb_strtolower($text);
+}
+```
+
+// slug
+```
+// Mio metodo
+    public static function slug(string $title, string $separator = '-', ?string $language = 'en'): string
+    {
+        $title = $language ? static::ascii($title, $language) : $title;
+        $flip  = $separator === '-' ? '_' : '-';
+        $title = preg_replace('![' . preg_quote($flip) . ']+!u', $separator, $title);
+        $title = str_replace('@', $separator . 'at' . $separator, $title);
+        $title = preg_replace('![^' . preg_quote($separator) . '\pL\pN\s]+!u', '', static::lower($title));
+        $title = preg_replace('![' . preg_quote($separator) . '\s]+!u', $separator, $title);
+
+        return trim($title, $separator);
+    }
+
+// Metodo della classe Str
+    public static function slug(string $text)
+    {
+        $original = $text;
+        // replace non letter or digits by -
+        $text = \preg_replace('~[^\pL\d]+~u', '-', $text);
+
+        // transliterate
+        $text = \iconv('utf-8', 'us-ascii//TRANSLIT', $text);
+
+        // remove unwanted characters
+        $text = \preg_replace('~[^-\w]+~', '', $text);
+
+        // trim
+        $text = \trim($text, '-');
+
+        // remove duplicate -
+        $text = \preg_replace('~-+~', '-', $text);
+
+        // lowercase
+        $text = mb_strtolower($text);
+
+        if (empty($text)) {
+            throw new NoReturn(__FUNCTION__, $original);
+        }
+
+        return $text;
+    }
+ ```
+
+// startsWith
+```
+// Mio metodo
+    public static function startsWith(string $haystack, string|array $needles): bool
+    {
+        foreach ((array)$needles as $needle) {
+            if ($needle !== '' && substr($haystack, 0, strlen($needle)) === (string)$needle) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+// Classe Str
+    public static function startsWith(string $text, string $start_with)
+    {
+        return 0 === \strncmp($text, $start_with, \strlen($start_with));
+    }
+```
+
+// strlen
+```
+// Mio metodo
+    public static function strlen(string $string, string $encoding = 'UTF-8'): int
+    {
+        if (function_exists('mb_strlen')) {
+            return mb_strlen($string, $encoding);
+        }
+
+        return strlen($string);
+    }
+
+// La classe Str non ha un metodo corrispondente.
+```
+
+// strContains
+```
+//Mio metodo
+    public static function strContains(string $haystack, string $needle): bool
+    {
+        return str_contains($haystack, $needle);
+    }
+
+// La classe Str non ha un metodo corrispondente
+```
+
+Riassumendo
+
+Quale tra i metodi comun che ti ho elencato qua sopra è il migliore?
+Il mio o quello della classe Str?
+

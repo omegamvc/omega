@@ -16,9 +16,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Users;
 
 use Exception;
-use Omega\Facade\Facades\Csrf;
-use Omega\Facade\Facades\Router;
-use Omega\Facade\Facades\View;
+use Omega\Support\Facade\Facades\Csrf;
+use Omega\Support\Facade\Facades\Router;
+use Omega\Support\Facade\Facades\View;
 
 /**
  * Show register form controller.

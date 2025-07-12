@@ -23,18 +23,18 @@ use Omega\Routing\ServiceProvider\RouterServiceProvider;
 use Omega\Session\ServiceProvider\SessionServiceProvider;
 use Omega\Validation\ServiceProvider\ValidationServiceProvider;
 use Omega\View\ServiceProvider\ViewServiceProvider;
-use Omega\Facade\Facades\Cache;
-use Omega\Facade\Facades\Csrf;
-use Omega\Facade\Facades\Config;
-use Omega\Facade\Facades\Database;
-use Omega\Facade\Facades\Filesystem;
-use Omega\Facade\Facades\Logger;
-use Omega\Facade\Facades\Queue;
-use Omega\Facade\Facades\Response;
-use Omega\Facade\Facades\Router;
-use Omega\Facade\Facades\Session;
-use Omega\Facade\Facades\Validation;
-use Omega\Facade\Facades\View;
+use Omega\Support\Facade\Facades\Cache;
+use Omega\Support\Facade\Facades\Csrf;
+use Omega\Support\Facade\Facades\Config;
+use Omega\Support\Facade\Facades\Database;
+use Omega\Support\Facade\Facades\Filesystem;
+use Omega\Support\Facade\Facades\Logger;
+use Omega\Support\Facade\Facades\Queue;
+use Omega\Support\Facade\Facades\Response;
+use Omega\Support\Facade\Facades\Router;
+use Omega\Support\Facade\Facades\Session;
+use Omega\Support\Facade\Facades\Validation;
+use Omega\Support\Facade\Facades\View;
 
 /**
  * Return an array with common application parameters.

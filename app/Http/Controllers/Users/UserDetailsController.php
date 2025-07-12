@@ -17,10 +17,10 @@ namespace App\Http\Controllers\Users;
 
 use Exception;
 use App\Models\User;
-use Omega\Facade\Facades\Csrf;
-use Omega\Facade\Facades\Router;
-use Omega\Facade\Facades\Session;
-use Omega\Facade\Facades\View;
+use Omega\Support\Facade\Facades\Csrf;
+use Omega\Support\Facade\Facades\Router;
+use Omega\Support\Facade\Facades\Session;
+use Omega\Support\Facade\Facades\View;
 
 /**
  * User details controller.

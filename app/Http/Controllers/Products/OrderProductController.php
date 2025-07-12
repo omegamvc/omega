@@ -17,10 +17,10 @@ namespace App\Http\Controllers\Products;
 
 use Exception;
 use App\Models\Order;
-use Omega\Facade\Facades\Csrf;
-use Omega\Facade\Facades\Response;
-use Omega\Facade\Facades\Router;
-use Omega\Facade\Facades\Session;
+use Omega\Support\Facade\Facades\Csrf;
+use Omega\Support\Facade\Facades\Response;
+use Omega\Support\Facade\Facades\Router;
+use Omega\Support\Facade\Facades\Session;
 
 /**
  * Order product controller.

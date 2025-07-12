@@ -15,7 +15,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Errors;
 
-use Omega\Facade\Facades\View;
+use Omega\Support\Facade\Facades\View;
 
 /**
  * Error 404 controller.

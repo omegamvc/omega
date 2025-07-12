@@ -16,9 +16,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Users;
 
 use Exception;
-use Omega\Facade\Facades\Response;
-use Omega\Facade\Facades\Router;
-use Omega\Facade\Facades\Session;
+use Omega\Support\Facade\Facades\Response;
+use Omega\Support\Facade\Facades\Router;
+use Omega\Support\Facade\Facades\Session;
 
 /**
  * Logout user controller.

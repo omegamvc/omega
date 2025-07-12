@@ -33,8 +33,7 @@
     "ext-pcntl": "*",
     "ext-simplexml": "*",
     "ext-redis": "*",
-    "omegamvc/framework": "^1.0.0",
-    "omegamvc/serializable-closure": "^1.0.0"
+    "omegamvc/framework": "^1.0.0"
   },
   "require-dev": {
     "phpstan/phpstan": "^2.1",

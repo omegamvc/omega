@@ -17,8 +17,8 @@ namespace App\Http\Controllers\Products;
 
 use Exception;
 use App\Models\Order;
-use Omega\Facade\Facades\Csrf;
-use Omega\Facade\Facades\View;
+use Omega\Support\Facade\Facades\Csrf;
+use Omega\Support\Facade\Facades\View;
 
 /**
  * Buy product controller class.
