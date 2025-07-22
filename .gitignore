@@ -1,0 +1,33 @@
+# Environment
+.env
+A
+Struttura
+
+# Build output
+/public/build
+/public/hot
+
+# Dependencies
+/vendor
+/node_modules
+
+# Lock
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+composer.lock
+
+# Visual Studio Code configs
+/.vscode
+
+# JetBrains IDEs
+/.idea
+
+# Logs
+npm-debug.log
+yarn-error.log
+
+# Quality
+phpunit.xml
+phpcs.xml
+phpstan.neon
