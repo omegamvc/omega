@@ -12,8 +12,8 @@
     <a href="https://github.com/omegamvc/omega/blob/main/LICENSE">License</a>
 </p>
 
-# PHP MVC
-Welcome to **php-mvc**, a minimal MVC framework designed to streamline your PHP development process. This lightweight framework offers essential features for building web applications while maintaining simplicity and ease of use.
+# OMEGA
+Welcome to **omega**, a minimal MVC framework designed to streamline your PHP development process. This lightweight framework offers essential features for building web applications while maintaining simplicity and ease of use.
 
 ## Feature
 - MVC structure
@@ -30,7 +30,7 @@ Welcome to **php-mvc**, a minimal MVC framework designed to streamline your PHP 
 1. **Create Your Application**:
 
 ```bash
-composer create-project omegamvc/php-mvc project-name
+composer create-project omegamvc/omega project-name
 ```
 
 2. **Navigate to Your Project**:

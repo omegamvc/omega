@@ -1,13 +1,24 @@
 {
     "name": "omegamvc/omega",
-    "description": "Very light php mvc, include cli easier to creat controller view and model quickly ",
     "type": "project",
-    "license": "LGPL-3.0-or-later",
+    "description": "Omega is a lightweight PHP framework designed for building modern web applications using the MVC architecture. Compatible with PHP 8.2+.",
+    "homepage": "https://omegamvc.github.io",
+    "license": "GPL-3.0",
     "authors": [
         {
             "name": "Adriano Giovannini",
-            "email": "agisoftt@gmail.com"
+            "email": "agisoftt@gmail.com",
+            "role": "Developer"
         }
+    ],
+    "keywords": [
+        "PHP",
+        "framework",
+        "MVC",
+        "PHP 8.3",
+        "example",
+        "modern",
+        "lightweight"
     ],
     "require": {
         "php": "^8.3",
