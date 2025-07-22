@@ -1,5 +1,5 @@
 {
-    "name": "omegamvc/php-mvc",
+    "name": "omegamvc/omega",
     "description": "Very light php mvc, include cli easier to creat controller view and model quickly ",
     "type": "project",
     "license": "LGPL-3.0-or-later",
