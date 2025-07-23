@@ -13,6 +13,7 @@ use Omega\Console\Commands\PackageDiscoveryCommand;
 use Omega\Console\Commands\RouteCommand;
 use Omega\Console\Commands\SeedCommand;
 use Omega\Console\Commands\ServeCommand;
+use Omega\Console\Commands\VendorImportCommand;
 use Omega\Console\Commands\ViewCommand;
 
 return [
@@ -29,6 +30,7 @@ return [
         ConfigCommand::$command,
         PackageDiscoveryCommand::$command,
         ClearCacheCommand::$command,
+        VendorImportCommand::$command,
         // more command here
     ],
 ];

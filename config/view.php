@@ -11,5 +11,12 @@ return [
         '.php',
         '',
     ],
-    'COMPILED_VIEW_PATH' => DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR,
+    'COMPILED_VIEW_PATH' =>
+        DIRECTORY_SEPARATOR .
+        'storage' .
+        DIRECTORY_SEPARATOR .
+        'app' .
+        DIRECTORY_SEPARATOR .
+        'view' .
+        DIRECTORY_SEPARATOR,
 ];
