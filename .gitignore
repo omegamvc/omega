@@ -31,3 +31,5 @@ yarn-error.log
 phpunit.xml
 phpcs.xml
 phpstan.neon
+
+/READMAP
