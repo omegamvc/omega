@@ -7,14 +7,16 @@ use App\Providers\CacheServiceProvider;
 use App\Providers\DatabaseServiceProvider;
 use App\Providers\RouteServiceProvider;
 use App\Providers\ViewServiceProvider;
+use Omega\Support\Path;
 
 return [
     'BASEURL'        => env('BASEURL', 'http://localhost'),
-    'timezone'       => env('TIME_ZONE', 'UTC'),
+    'TIME_ZONE'      => env('TIME_ZONE', 'UTC'),
     'APP_KEY'        => env('APP_KEY', ''),
     'ENVIRONMENT'    => env('APP_ENV', 'dev'),
     'APP_DEBUG'      => (bool) env('APP_DEBUG', ''),
-    'BCRYPT_ROUNDS'  => (bool) env('BCRYPT_ROUNDS', 12),
+    'BCRYPT_ROUNDS'  => (int) env('BCRYPT_ROUNDS', 12),
+   // 'CONFIG_PATH'    => (string)env('CONFIG_PATH', Path::getPath('app.config')),
     'CONFIG_STORAGE' => env('CONFIG_STORAGE', 'file'),
 
     'COMMAND_PATH'     => DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Commands' . DIRECTORY_SEPARATOR,
