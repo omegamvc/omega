@@ -30,6 +30,7 @@
         "ext-pdo": "*",
         "ext-posix": "*",
         "ext-readline": "*",
+        "ext-simplexml": "*",
         "omegamvc/framework": "2.0.0",
         "react/event-loop": "^1.5",
         "vlucas/phpdotenv": "^5.6"
