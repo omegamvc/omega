@@ -1,78 +1,103 @@
 <?php
 
-/**
- * Part of App (Omega Application) - Providers Package
- * php version 8.3
- *
- * @link      https://omegamvc.github.io
- * @author    Adriano Giovannini <agisoftt@gmail.com>
- * @copyright Copyright (c) 2024 - 2025 Adriano Giovannini (https://omegamvc.github.io)
- * @license   https://www.gnu.org/licenses/gpl-3.0-standalone.html     GPL V3.0+
- * @version   2.0.0
- */
-
 declare(strict_types=1);
 
 namespace App\Providers;
 
-use Omega\Cache\Cache;
-use Omega\Cache\Storage\ArrayStorage;
-use Omega\Cache\Storage\FileStorage;
+use Memcached as M;
+use Redis as R;
+use Omega\Cache\Adapter\Apcu;
+use Omega\Cache\Adapter\File;
+use Omega\Cache\Adapter\Memcached;
+use Omega\Cache\Adapter\Redis;
+use Omega\Cache\Exceptions\UnsupportedAdapterException;
 use Omega\Container\Provider\AbstractServiceProvider;
 use Omega\Support\Facades\Config;
 
-/**
- * Service provider for the cache system.
- *
- * This provider registers and configures the application's cache services,
- * including support for file-based and in-memory (array) storage drivers.
- * It initializes the cache manager, binds all supported drivers to the
- * container, and sets the default cache driver based on the
- * `CACHE_STORAGE` environment configuration.
- *
- * Drivers registered:
- * - `cache.file`  → File-based persistent storage
- * - `cache.array` → In-memory temporary storage
- * - `cache`       → Cache manager with access to all drivers
- *
- * @category  App
- * @package   Providers
- * @link      https://omegamvc.github.io
- * @author    Adriano Giovannini <agisoftt@gmail.com>
- * @copyright Copyright (c) 2024 - 2025 Adriano Giovannini (https://omegamvc.github.io)
- * @license   https://www.gnu.org/licenses/gpl-3.0-standalone.html     GPL V3.0+
- * @version   2.0.0
- */
 class CacheServiceProvider extends AbstractServiceProvider
 {
-    /**
-     * {@inheritdoc}
-     */
     public function boot(): void
     {
-        $config = Config::get('CACHE_STORAGE', 'file');
-        $cache  = match (true) {
-            $config === 'array' => 'cache.array',
-            default             => 'cache.file',
+        $config  = Config::get('cache');
+        $default = $config['default'];
+
+        $this->registerAllDrivers($config, $default);
+
+        $type = $config[$default]['type'] ?? null;
+
+        if (!$type) {
+            throw new UnsupportedAdapterException('Type is not defined.');
+        }
+
+        $instance = match ($type) {
+            'apcu'      => new Apcu($config[$default]),
+            'file'      => new File($config[$default]),
+            'memcached' => $this->createMemcached($config[$default]),
+            'redis'     => $this->createRedis($config[$default]),
+            default     => throw new UnsupportedAdapterException('Unrecognized type.')
         };
 
-        $this->app->set(
-            'cache.file',
-            fn (): FileStorage => new FileStorage(cache_path(), 3_600)
-        );
+        $this->app->instance('cache', $instance);
+    }
 
-        $this->app->set(
-            'cache.array',
-            fn (): ArrayStorage => new ArrayStorage(3_600)
-        );
+    public function registerAllDrivers(array $config, string $default): void
+    {
+        $map = [];
 
-        $this->app->set('cache', function () use ($cache): Cache {
-            $manager = new Cache();
-            $manager->setDefaultDriver($this->app[$cache]);
-            $manager->setDriver('file', $this->app['cache.file']);
-            $manager->setDriver('array', $this->app['cache.array']);
+        foreach ($config as $key => $driverConfig) {
+            if (! is_array($driverConfig) || ! isset($driverConfig['type'])) {
+                continue;
+            }
 
-            return $manager;
-        });
+            $type = $driverConfig['type'];
+
+            if ($key === $default) {
+                continue;
+            }
+
+            $callback = match ($type) {
+                'apcu'      => fn () => new Apcu($driverConfig),
+                'file'      => fn () => new File($driverConfig),
+                'memcached' => fn () => $this->createMemcached($driverConfig),
+                'redis'     => fn () => $this->createRedis($driverConfig),
+                default     => fn () => throw new UnsupportedAdapterException("Unrecognized cache type: $type")
+            };
+
+            $this->app->set("cache.{$key}", $callback);
+
+            $map[$key] = "cache.{$key}";
+        }
+
+        $this->app->set('caches', $map);
+    }
+
+    public function createMemcached(array $config): Memcached
+    {
+        $memcached = new M();
+
+        /** @var string $host */
+        $host = Config::get('cache.memcached.host');
+
+        /** @var int $port */
+        $port = Config::get('cache.memcached.port');
+
+        $memcached->addServer($host, $port);
+
+        return new Memcached($memcached, $config);
+    }
+
+    public function createRedis(array $config): Redis
+    {
+        $redis = new R();
+
+        /** @var string $host */
+        $host = Config::get('cache.redis.host');
+
+        /** @var int $port */
+        $port = Config::get('cache.redis.port');
+
+        $redis->connect($host, $port);
+
+        return new Redis($redis, $config);
     }
 }

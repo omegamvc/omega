@@ -22,14 +22,17 @@
     ],
     "require": {
         "php": "^8.3",
+        "ext-apcu": "*",
         "ext-http": "*",
         "ext-intl": "*",
         "ext-mbstring": "*",
+        "ext-memcached": "*",
         "ext-openssl": "*",
         "ext-pcntl": "*",
         "ext-pdo": "*",
         "ext-posix": "*",
         "ext-readline": "*",
+        "ext-redis": "*",
         "ext-simplexml": "*",
         "omegamvc/framework": "3.0.0"
     },
