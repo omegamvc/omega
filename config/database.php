@@ -31,7 +31,7 @@ return [
      * to use as your default connection for all database work.  Of course,
      * you may use many connection at once using the Database library.
      */
-    'default' => env('DB_CONNECTION', 'sqlite'),
+    'default' => env('DB_CONNECTION', 'mysql'),
 
     /**
      * Database connection.
@@ -50,7 +50,7 @@ return [
         'port'     => env('DB_PORT', '3306'),
         'database' => env('DB_DATABASE', 'omega'),
         'username' => env('DB_USERNAME', 'root'),
-        'password' => env('DB_PASSWORD', 'vb65ty4'),
+        'password' => env('DB_PASSWORD', ''),
         'charset'  => env('DB_CHARSET', 'utf8mb4'),
     ],
     'sqlite'  => [

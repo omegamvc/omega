@@ -1,7 +1,7 @@
 <?php
 
 /**
- * OMega Application.
+ * Omega Application.
  *
  * @link       https://omegamvc.github.io
  * @author     Adriano Giovannini <agisoftt@gmail.com>
@@ -32,4 +32,8 @@ require_once __DIR__ . '/../vendor/autoload.php';
  * application.
  */
 $application = require_once __DIR__ . '/../bootstrap/app.php';
-$application->bootstrap()->send();
+try {
+    $application->bootstrap()->send();
+} catch (Throwable $e) {
+
+}

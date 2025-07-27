@@ -54,12 +54,17 @@ return [
      * how date and time values are formatted and displayed based on the
      * geographical location of the application.
      */
-    'timezone'  => 'Europe/Rome',
+    'timezone'    => (string)env('TIMEZONE','Europe/Rome'),
 
+    // Detect the environment.
+    'environment' => env('APP_ENV', 'dev'),
+
+    // Detect debug.
+    'debug'       => env('APP_DEBUG', true),
     /**
      * Array of ServiceProviders.
      */
-    'providers' => [
+    'providers'   => [
         ConfigServiceProvider::class,
         CacheServiceProvider::class,
         CsrfServiceProvider::class,

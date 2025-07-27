@@ -19,11 +19,9 @@ use Omega\Application\Application;
  * The first thing  we will  do is create  a new Omega application
  * instance which  serves at the "glue" for  all the components of
  * Omega,  and  is   the IoC container  for the system binding all
- * * the various parts.
+ * the various parts.
  */
-$application = Application::getInstance(
-    $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
-);
+$application = Application::getInstance(dirname(__DIR__));
 
 /**
  * Return the application.
