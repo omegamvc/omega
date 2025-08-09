@@ -1,22 +1,31 @@
-database/sqlite/*.sqlite
-cache/
-.idea/
-node_modules/
-vendor/
-.vscode/
-composer.lock
+# Environment
 .env
-package-lock.json
-phpcs.xml
-phpdoc.xml
-php_errors.log
-phpstan.neon
-phpunit.xml
-report.txt
-Thumbs.db
-*.log
-*.txt
-*.swo
-*.swp
 
-!storage/framework/data/cache/
+# Cache
+.php-cs-fixer.cache
+.phpunit.result.cache
+/.phpunit.cache
+
+# Build output
+/public/build
+/public/hot
+
+# Dependencies
+/vendor
+/node_modules
+
+# Lock
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+composer.lock
+
+# Visual Studio Code configs
+/.vscode
+
+# JetBrains IDEs
+/.idea
+
+# Logs
+npm-debug.log
+yarn-error.log
