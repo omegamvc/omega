@@ -1,10 +1,10 @@
-<p style="text-align: center;">
+<p align="center">
     <a href="https://omegamvc.github.io" target="_blank">
         <img src="https://github.com/omegamvc/omega-assets/blob/main/images/logo-omega.png" alt="Omega Logo">
     </a>
 </p>
 
-<p style="text-align: center;">
+<p align="center">
     <a href="https://omegamvc.github.io">Documentation</a> |
     <a href="https://github.com/omegamvc/omegamvc.github.io/blob/main/README.md#changelog">Changelog</a> |
     <a href="https://github.com/omegamvc/omega/blob/main/CONTRIBUTING.md">Contributing</a> |
