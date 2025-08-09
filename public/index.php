@@ -9,22 +9,22 @@ require_once dirname(__DIR__) . '/vendor/autoload.php';
 /**
  * Load Application instan.
  *
- * @var System\Integrate\Applicationn
+ * @var Omega\Integrate\Application
  */
 $app = require_once dirname(__DIR__) . '/bootstrap/init.php';
 
 /**
  * Declare http karnel.
  *
- * @var System\Integrate\Http\Karnel
+ * @var Omega\Integrate\Http\Karnel
  */
-$karnel = $app->make(System\Integrate\Http\Karnel::class);
+$karnel = $app->make(Omega\Integrate\Http\Karnel::class);
 
 /**
  * Handle Respone from httpkarnel.
  */
 $response = $karnel->handle(
-    $request = (new System\Http\RequestFactory())->getFromGloball()
+    $request = (new Omega\Http\RequestFactory())->getFromGloball()
 )->send();
 
 $karnel->terminate($request, $response);
