@@ -1,0 +1,65 @@
+{
+  "name": "omegamvc/omega",
+  "type": "project",
+  "description": "Omega is a lightweight PHP framework designed for building modern web applications using the MVC architecture. Compatible with PHP 8.2+.",
+  "homepage": "https://omegamvc.github.io",
+  "license": "GPL-3.0",
+  "authors": [
+    {
+      "name": "Adriano Giovannini",
+      "email": "agisoftt@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "keywords": [
+    "PHP",
+    "framework",
+    "MVC",
+    "PHP 8.2",
+    "example",
+    "modern",
+    "lightweight"
+  ],
+  "require": {
+    "php": ">=8.3",
+    "ext-apcu": "*",
+    "ext-fileinfo": "*",
+    "ext-ftp": "*",
+    "ext-mbstring": "*",
+    "ext-memcached": "*",
+    "ext-pdo": "*",
+    "ext-zip": "*",
+    "ext-bz2": "*",
+    "ext-pcntl": "*",
+    "ext-simplexml": "*",
+    "ext-redis": "*",
+    "omegamvc/framework": "^1.0.0"
+  },
+  "require-dev": {
+    "filp/whoops": "^2.18",
+    "squizlabs/php_codesniffer": "^3.11"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "app/",
+      "Database\\Migrations\\Schemes\\": "database/migrations/schemes/"
+    }
+  },
+  "scripts": {
+    "serve": "XDEBUG_MODE=off php omega serve",
+    "db_migrate": "XDEBUG_MODE=off php omega migrate",
+    "db_fresh": "XDEBUG_MODE=off php omega migrate --fresh",
+    "phpcs": "XDEBUG_MODE=off php vendor/bin/phpcs vendor/omegamvc",
+    "phpdoc": "XDEBUG_MODE=off vendor/bin/phpDocumentor.phar",
+    "post-update-cmd": [
+      "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+    ]
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
