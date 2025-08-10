@@ -7,6 +7,8 @@ namespace App\Commands\Cron;
 use Omega\Cron\InterpolateInterface;
 use Omega\Support\Facades\DB;
 
+use function json_encode;
+
 class Log implements InterpolateInterface
 {
     public function interpolate(string $message, array $context = []): void

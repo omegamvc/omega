@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'DB_HOST' => $_ENV['DB_HOST'] ?? 'localhost',
     'DB_USER' => $_ENV['DB_USER'] ?? 'root',

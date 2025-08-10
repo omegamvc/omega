@@ -10,7 +10,7 @@ use Omega\Router\Router;
 
 class RouteServiceProvider extends ServiceProvider
 {
-    public function boot()
+    public function boot(): void
     {
         Router::middleware([
             // middleware

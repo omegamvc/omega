@@ -1,5 +1,11 @@
 <?php
 
+use DI\DependencyException;
+use DI\NotFoundException;
+use Omega\Http\RequestFactory;
+use Omega\Integrate\Application;
+use Omega\Integrate\Http\Kernel;
+
 if (file_exists($maintenance = dirname(__DIR__) . '/storage/app/maintenance.php')) {
     require $maintenance;
 }
@@ -7,24 +13,28 @@ if (file_exists($maintenance = dirname(__DIR__) . '/storage/app/maintenance.php'
 require_once dirname(__DIR__) . '/vendor/autoload.php';
 
 /**
- * Load Application instan.
+ * Application instance.
  *
- * @var Omega\Integrate\Application
+ * @var Application $app
  */
-$app = require_once dirname(__DIR__) . '/bootstrap/init.php';
+$app = require_once dirname(__DIR__) . '/bootstrap/app.php';
 
 /**
- * Declare http karnel.
+ * Declare http kernel.
  *
- * @var Omega\Integrate\Http\Karnel
+ * @var Kernel $kernel
  */
-$karnel = $app->make(Omega\Integrate\Http\Karnel::class);
+try {
+    $kernel = $app->make(Kernel::class);
+} catch (DependencyException|NotFoundException $e) {
+
+}
 
 /**
- * Handle Respone from httpkarnel.
+ * Handle Response from HttpKernel.
  */
-$response = $karnel->handle(
-    $request = (new Omega\Http\RequestFactory())->getFromGloball()
+$response = $kernel->handle(
+    $request = (new RequestFactory())->getFromGlobal()
 )->send();
 
-$karnel->terminate($request, $response);
+$kernel->terminate($request, $response);

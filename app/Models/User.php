@@ -12,6 +12,7 @@ use Omega\Database\MyModel\Model;
  */
 class User extends Model
 {
-    protected string $table_name  = 'users';
-    protected string $primery_key = 'user';
+    protected string $tableName  = 'users';
+
+    protected string $primaryKey = 'user';
 }

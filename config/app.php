@@ -1,5 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
+use App\Providers\AppServiceProvider;
+use App\Providers\CacheServiceProvider;
+use App\Providers\DatabaseServiceProvider;
+use App\Providers\RouteServiceProvider;
+use App\Providers\ViewServiceProvider;
+
 return [
     'BASEURL'           => $_ENV['BASEURL'] ?? 'http://localhost',
     'time_zone'         => 'Asia/Jakarta',
@@ -10,7 +18,7 @@ return [
     'BCRYPT_ROUNDS'     => $_ENV['BCRYPT_ROUNDS'] ?? 12,
     'CONFIG_STORAGE'    => $_ENV['file'] ?? 'file',
 
-    'COMMNAD_PATH'          => DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Commands' . DIRECTORY_SEPARATOR,
+    'COMMAnD_PATH'          => DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Commands' . DIRECTORY_SEPARATOR,
     'CONTROLLER_PATH'       => DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Controllers' . DIRECTORY_SEPARATOR,
     'MODEL_PATH'            => DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Models' . DIRECTORY_SEPARATOR,
     'MIDDLEWARE'            => DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Middlewares' . DIRECTORY_SEPARATOR,
@@ -27,10 +35,10 @@ return [
     'SEEDER_PATH'           => DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . 'seeders' . DIRECTORY_SEPARATOR,
 
     'PROVIDERS'         => [
-        App\Providers\AppServiceProvider::class,
-        App\Providers\RouteServiceProvider::class,
-        App\Providers\DatabaseServiceProvider::class,
-        App\Providers\ViewServiceProvider::class,
-        App\Providers\CacheServiceProvider::class,
+        AppServiceProvider::class,
+        RouteServiceProvider::class,
+        DatabaseServiceProvider::class,
+        ViewServiceProvider::class,
+        CacheServiceProvider::class,
     ],
 ];

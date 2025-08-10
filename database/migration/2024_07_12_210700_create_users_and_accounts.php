@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Omega\Database\MySchema\Table\Create;
 use Omega\Support\Facades\Schema;
 

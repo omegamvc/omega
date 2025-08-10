@@ -1,19 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Commands;
 
 use App\Commands\Cron\Log;
-use React\EventLoop\Loop;
 use Omega\Console\Style\Style;
 use Omega\Cron\Schedule;
 use Omega\Integrate\Console\CronCommand as ConsoleCronCommand;
 use Omega\Time\Now;
+use React\EventLoop\Loop;
+
+use function microtime;
+use function round;
 
 class CronCommand extends ConsoleCronCommand
 {
-    public function __construct($argv, $default_option = [])
+    public function __construct($argv, $defaultOption = [])
     {
-        parent::__construct($argv, $default_option);
+        parent::__construct($argv, $defaultOption);
+
         $this->log = new Log();
     }
 
@@ -40,6 +46,7 @@ class CronCommand extends ConsoleCronCommand
             ->out();
 
         Loop::addPeriodicTimer(60.00, function () {
+            /** @noinspection DuplicatedCode */
             $clock = new Now();
             $print = new Style();
             $time  = $clock->year . '-' . $clock->month . '-' . $clock->day;
@@ -48,15 +55,15 @@ class CronCommand extends ConsoleCronCommand
                 ->push('Run cron at - ' . $time)->textDim()
                 ->push(' ' . $clock->hour . ':' . $clock->minute . ':' . $clock->second);
 
-            $watch_start = microtime(true);
+            $watchStart = microtime(true);
 
             $this->getSchedule()->execute();
 
-            $watch_end = round(microtime(true) - $watch_start, 3) * 1000;
+            $watchEnd = round(microtime(true) - $watchStart, 3) * 1000;
             $print
                 ->repeat(' ', 34 - $print->length())
                 ->push('-> ')->textDim()
-                ->push($watch_end . 'ms')->textYellow()
+                ->push($watchEnd . 'ms')->textYellow()
                 ->out()
             ;
         });

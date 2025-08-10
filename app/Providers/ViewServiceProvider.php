@@ -4,15 +4,23 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use DI\DependencyException;
+use DI\NotFoundException;
 use Omega\Http\Response;
 use Omega\Integrate\ServiceProvider;
 use Omega\Integrate\Vite;
 use Omega\View\Templator;
 use Omega\View\TemplatorFinder;
 
+use function array_merge;
+
 class ViewServiceProvider extends ServiceProvider
 {
-    public function boot()
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function boot(): void
     {
         $this->registerViteResolver();
         $this->registerViewResolver();
@@ -25,9 +33,13 @@ class ViewServiceProvider extends ServiceProvider
         $this->app->set('vite.hasManifest', fn (): bool => file_exists($this->app->get('vite.location')));
     }
 
+    /**
+     * @throws NotFoundException
+     * @throws DependencyException
+     */
     protected function registerViewResolver(): void
     {
-        $global_template_var = [
+        $globalTemplateVar = [
             'vite_has_manifest' => $this->app->get('vite.hasManifest'),
             'vite_hmr_script'   => $this->app->get('vite.gets')->isRunningHRM() ? $this->app->get('vite.gets')->getHmrScript() : '',
         ];
@@ -38,7 +50,7 @@ class ViewServiceProvider extends ServiceProvider
         $this->app->set(
             'view.response',
             fn () => fn (string $view, array $data = []): Response => new Response(
-                $this->app->get('view.instance')->render($view, array_merge($data, $global_template_var))
+                $this->app->get('view.instance')->render($view, array_merge($data, $globalTemplateVar))
             )
         );
     }

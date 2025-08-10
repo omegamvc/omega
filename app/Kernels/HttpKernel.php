@@ -5,16 +5,20 @@ declare(strict_types=1);
 namespace App\Kernels;
 
 use Omega\Integrate\Application;
-use Omega\Integrate\Http\Karnel as Kernel;
+use Omega\Integrate\Http\Kernel;
 use Omega\Router\RouteDispatcher;
 use Omega\Router\Router;
+use Whoops\Handler\PrettyPageHandler;
+use Whoops\Run;
+use Whoops\Handler\Handler;
 
 class HttpKernel extends Kernel
 {
-    /** @var \Whoops\Run */
-    private $run;
-    /** @var \Whoops\Handler */
-    private $handler;
+    /** @var Run */
+    private Run $run;
+
+    /** @var Handler */
+    private Handler $handler;
 
     public function __construct(Application $app)
     {
@@ -22,11 +26,11 @@ class HttpKernel extends Kernel
 
         $this->app->bootedCallback(function () {
             if ($this->app->isDebugMode()) {
-                /* @var \Whoops\Handler\PrettyPageHandler */
+                /* @var PrettyPageHandler $handler */
                 $this->handler = $this->app->make('error.PrettyPageHandler');
-                $this->handler->setPageTitle('php mvc');
+                $this->handler->setPageTitle('Omega MVC');
 
-                /* @var \Whoops\Run */
+                /* @var Run $run */
                 $this->run = $this->app->make('error.handle');
                 $this->run
                   ->pushHandler($this->handler)
