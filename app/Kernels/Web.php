@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace App\Kernels;
 
 use Omega\Integrate\Application;
-use Omega\Integrate\Http\Kernel;
+use Omega\Http\HttpKernel;
 use Omega\Router\RouteDispatcher;
 use Omega\Router\Router;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 use Whoops\Handler\Handler;
 
-class HttpKernel extends Kernel
+class Web extends HttpKernel
 {
     /** @var Run */
     private Run $run;

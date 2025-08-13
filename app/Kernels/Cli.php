@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\Kernels;
 
 use Omega\Integrate\Application;
-use Omega\Integrate\Console\Kernel;
+use Omega\Console\ConsoleKernel;
 use Whoops\Handler\PlainTextHandler;
 use Whoops\Run;
 use Whoops\Handler\Handler;
 
-class ConsoleKernel extends Kernel
+class Cli extends ConsoleKernel
 {
     /** @var Run */
     private Run $run;
