@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Exceptions;
 
-use Omega\Integrate\Exceptions\Handler as BaseHandler;
+use Omega\Exceptions\ExceptionHandler;
 
-class Handler extends BaseHandler
+class Handler extends ExceptionHandler
 {
 }

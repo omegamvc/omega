@@ -7,10 +7,10 @@ namespace App\Providers;
 use Omega\Cache\CacheManager;
 use Omega\Cache\Storage\ArrayStorage;
 use Omega\Cache\Storage\FileStorage;
-use Omega\Integrate\ServiceProvider;
+use Omega\Container\Provider\AbstractServiceProvider;
 use Omega\Support\Facades\Config;
 
-class CacheServiceProvider extends ServiceProvider
+class CacheServiceProvider extends AbstractServiceProvider
 {
     public function boot(): void
     {

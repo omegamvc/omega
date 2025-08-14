@@ -7,14 +7,14 @@ namespace App\Providers;
 use DI\DependencyException;
 use DI\NotFoundException;
 use Omega\Http\Response;
-use Omega\Integrate\ServiceProvider;
+use Omega\Container\Provider\AbstractServiceProvider;
 use Omega\Support\Vite;
 use Omega\View\Templator;
 use Omega\View\TemplatorFinder;
 
 use function array_merge;
 
-class ViewServiceProvider extends ServiceProvider
+class ViewServiceProvider extends AbstractServiceProvider
 {
     /**
      * @throws DependencyException

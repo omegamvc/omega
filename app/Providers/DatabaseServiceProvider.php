@@ -9,9 +9,9 @@ use DI\NotFoundException;
 use Omega\Database\MyPDO;
 use Omega\Database\MyQuery;
 use Omega\Database\MySchema;
-use Omega\Integrate\ServiceProvider;
+use Omega\Container\Provider\AbstractServiceProvider;
 
-class DatabaseServiceProvider extends ServiceProvider
+class DatabaseServiceProvider extends AbstractServiceProvider
 {
     /**
      * @throws DependencyException

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Middlewares\AppMiddleware;
-use Omega\Integrate\ServiceProvider;
+use Omega\Container\Provider\AbstractServiceProvider;
 use Omega\Router\Router;
 
-class RouteServiceProvider extends ServiceProvider
+class RouteServiceProvider extends AbstractServiceProvider
 {
     public function boot(): void
     {
