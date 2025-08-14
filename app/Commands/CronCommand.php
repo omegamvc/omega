@@ -7,7 +7,7 @@ namespace App\Commands;
 use App\Commands\Cron\Log;
 use Omega\Console\Style\Style;
 use Omega\Cron\Schedule;
-use Omega\Integrate\Console\CronCommand as ConsoleCronCommand;
+use Omega\Console\Commands\CronCommand as ConsoleCronCommand;
 use Omega\Time\Now;
 use React\EventLoop\Loop;
 
