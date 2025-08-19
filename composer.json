@@ -22,7 +22,7 @@
         "lightweight"
     ],
     "require": {
-        "php": "^8.3",
+        "php": "^8.4",
         "ext-http": "*",
         "ext-iconv": "*",
         "ext-mbstring": "*",
