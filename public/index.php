@@ -1,7 +1,7 @@
 <?php
 
-use DI\DependencyException;
-use DI\NotFoundException;
+use Omega\Container\Exceptions\DependencyException;
+use Omega\Container\Exceptions\NotFoundException;
 use Omega\Http\RequestFactory;
 use Omega\Application\Application;
 use Omega\Http\HttpKernel;
@@ -34,7 +34,7 @@ try {
  * Handle Response from HttpKernel.
  */
 $response = $kernel->handle(
-    $request = (new RequestFactory())->getFromGlobal()
+    $request = new RequestFactory()->getFromGlobal()
 )->send();
 
 $kernel->terminate($request, $response);
