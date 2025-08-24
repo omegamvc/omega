@@ -21,10 +21,10 @@ class DatabaseServiceProvider extends AbstractServiceProvider
     {
         $configs = $this->app->get('config');
         $sql_dsn = [
-            'host'           => $configs['DB_HOST'],
-            'user'           => $configs['DB_USER'],
-            'password'       => $configs['DB_PASS'],
-            'database_name'  => $configs['DB_NAME'],
+            'host'           => $configs['dbhost'],
+            'user'           => $configs['dbuser'],
+            'password'       => $configs['dbpass'],
+            'database_name'  => $configs['dbname'],
         ];
 
         $this->app->set('dsn.sql', $sql_dsn);

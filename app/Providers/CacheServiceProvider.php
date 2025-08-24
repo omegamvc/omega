@@ -22,7 +22,7 @@ class CacheServiceProvider extends AbstractServiceProvider
 
         $this->app->set(
             'cache.file',
-            fn (): FileStorage => new FileStorage(cache_path(), 3_600)
+            fn (): FileStorage => new FileStorage(get_path('path.cache'), 3_600)
         );
 
         $this->app->set(

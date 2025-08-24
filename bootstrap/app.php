@@ -5,13 +5,13 @@ declare(strict_types=1);
 use App\Exceptions\Handler;
 use App\Kernels\Cli;
 use App\Kernels\Web;
-use Dotenv\Dotenv;
 use Omega\Application\Application;
 use Omega\Exceptions\ExceptionHandler;
 use Omega\Http\HttpKernel;
 use Omega\Console\ConsoleKernel;
+use Omega\Support\Env;
 
-Dotenv::createImmutable(dirname(__DIR__))->load();
+Env::load(dirname(__DIR__));
 
 $app = new Application(dirname(__DIR__));
 

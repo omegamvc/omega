@@ -3,5 +3,5 @@
 declare(strict_types=1);
 
 return [
-    'cache' => env('CACHE_STORAGE', '')
+    'bcrypt'   => env('BCRYPT_ROUNDS', 12),
 ];

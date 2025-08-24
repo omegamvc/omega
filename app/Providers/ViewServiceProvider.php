@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use DI\DependencyException;
-use DI\NotFoundException;
+use Omega\Container\Definition\Exceptions\InvalidDefinitionException;
+use Omega\Container\Exceptions\DependencyException;
+use Omega\Container\Exceptions\NotFoundException;
 use Omega\Http\Response;
 use Omega\Container\Provider\AbstractServiceProvider;
 use Omega\Support\Vite;
@@ -18,7 +19,8 @@ class ViewServiceProvider extends AbstractServiceProvider
 {
     /**
      * @throws DependencyException
-     * @throws NotFoundException
+     * @throws NotFoundException|
+     * @throws InvalidDefinitionException
      */
     public function boot(): void
     {
@@ -28,14 +30,15 @@ class ViewServiceProvider extends AbstractServiceProvider
 
     protected function registerViteResolver(): void
     {
-        $this->app->set('vite.gets', fn (): Vite => new Vite($this->app->getPublicPath(), '/build/'));
-        $this->app->set('vite.location', fn (): string => $this->app->getPublicPath() . '/build/manifest.json');
+        $this->app->set('vite.gets', fn (): Vite => new Vite(get_path('path.public'), '/build/'));
+        $this->app->set('vite.location', fn (): string => get_path('path.public') . '/build/manifest.json');
         $this->app->set('vite.hasManifest', fn (): bool => file_exists($this->app->get('vite.location')));
     }
 
     /**
      * @throws NotFoundException
-     * @throws DependencyException
+     * @throws DependencyException|
+     * @throws InvalidDefinitionException
      */
     protected function registerViewResolver(): void
     {
@@ -45,8 +48,8 @@ class ViewServiceProvider extends AbstractServiceProvider
         ];
         $extensions = $this->app->get('config')['VIEW_EXTENSIONS'] ?? [];
 
-        $this->app->set(TemplatorFinder::class, fn () => new TemplatorFinder(view_paths(), $extensions));
-        $this->app->set('view.instance', fn () => new Templator($this->app->get(TemplatorFinder::class), compiled_view_path()));
+        $this->app->set(TemplatorFinder::class, fn () => new TemplatorFinder(get_path('paths.view'), $extensions));
+        $this->app->set('view.instance', fn () => new Templator($this->app->get(TemplatorFinder::class), get_path('path.compiled_view_path')));
         $this->app->set(
             'view.response',
             fn () => fn (string $view, array $data = []): Response => new Response(

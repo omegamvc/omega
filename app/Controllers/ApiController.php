@@ -46,7 +46,7 @@ class ApiController extends Controller
         $serviceName = str_replace('-', '', $serviceName);
         $methodNama  = str_replace('-', '_', $methodNama);
 
-        if (file_exists(services_path($serviceName . '.php'))) {
+        if (file_exists(get_path('path.services', $serviceName . '.php'))) {
             $service = new $serviceName();
             if (method_exists($service, $methodNama)) {
                 /** @var array<string, mixed> $resultWrap*/
