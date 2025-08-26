@@ -1,14 +1,15 @@
 #!/usr/bin/env php
 <?php
 
+use Omega\Console\ApplicationConsole;
+
 require_once './vendor/autoload.php';
 
 // call CLI
 $app = require_once __DIR__ . '/bootstrap/app.php';
 
-$out = $app->make(\Omega\Console\ConsoleKernel::class);
+$out = $app->make(ApplicationConsole::class);
 
 $handle = $out->handle($argv);
 
 exit($handle);
-

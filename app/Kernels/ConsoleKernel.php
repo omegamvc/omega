@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace App\Kernels;
 
 use Omega\Application\Application;
-use Omega\Console\ConsoleKernel;
+use Omega\Console\ApplicationConsole;
+use Omega\Container\Invoker\Exception\InvocationException;
+use Omega\Container\Invoker\Exception\NotCallableException;
+use Omega\Container\Invoker\Exception\NotEnoughParametersException;
 use Whoops\Handler\PlainTextHandler;
 use Whoops\Run;
 use Whoops\Handler\Handler;
 
-class Cli extends ConsoleKernel
+class ConsoleKernel extends ApplicationConsole
 {
     /** @var Run */
     private Run $run;
@@ -18,6 +21,11 @@ class Cli extends ConsoleKernel
     /** @var Handler */
     private Handler $handler;
 
+    /**
+     * @throws InvocationException
+     * @throws NotCallableException
+     * @throws NotEnoughParametersException
+     */
     public function __construct(Application $app)
     {
         parent::__construct($app);

@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Kernels;
 
 use Omega\Application\Application;
+use Omega\Container\Invoker\Exception\InvocationException;
+use Omega\Container\Invoker\Exception\NotCallableException;
+use Omega\Container\Invoker\Exception\NotEnoughParametersException;
 use Omega\Http\HttpKernel;
 use Omega\Router\RouteDispatcher;
 use Omega\Router\Router;
@@ -20,6 +23,11 @@ class Web extends HttpKernel
     /** @var Handler */
     private Handler $handler;
 
+    /**
+     * @throws NotCallableException
+     * @throws InvocationException
+     * @throws NotEnoughParametersException
+     */
     public function __construct(Application $app)
     {
         parent::__construct($app);

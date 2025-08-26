@@ -3,12 +3,12 @@
 declare(strict_types=1);
 
 use App\Exceptions\Handler;
-use App\Kernels\Cli;
+use App\Kernels\ConsoleKernel;
 use App\Kernels\Web;
 use Omega\Application\Application;
 use Omega\Exceptions\ExceptionHandler;
 use Omega\Http\HttpKernel;
-use Omega\Console\ConsoleKernel;
+use Omega\Console\ApplicationConsole;
 use Omega\Support\Env;
 
 Env::load(dirname(__DIR__));
@@ -21,8 +21,8 @@ $app->set(
 );
 
 $app->set(
-    ConsoleKernel::class,
-    fn () => new Cli($app)
+    ApplicationConsole::class,
+    fn () => new ConsoleKernel($app)
 );
 
 $app->set(
