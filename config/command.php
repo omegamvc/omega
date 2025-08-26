@@ -31,6 +31,5 @@ return [
         PackageDiscoveryCommand::$command,
         ClearCacheCommand::$command,
         VendorImportCommand::$command,
-        // more command here
     ],
 ];

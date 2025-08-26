@@ -5,7 +5,6 @@ use Omega\Console\ApplicationConsole;
 
 require_once './vendor/autoload.php';
 
-// call CLI
 $app = require_once __DIR__ . '/bootstrap/app.php';
 
 $out = $app->make(ApplicationConsole::class);
