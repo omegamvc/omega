@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Commands\Cron\Log;
-use Omega\Cron\Schedule;
 use Omega\Container\Provider\AbstractServiceProvider;
+use Omega\Cron\Log;
+use Omega\Cron\Schedule;
 use Omega\Security\Hashing\Argon2IdHasher;
 use Omega\Security\Hashing\ArgonHasher;
 use Omega\Security\Hashing\BcryptHasher;

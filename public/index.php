@@ -4,7 +4,7 @@ use Omega\Container\Exceptions\DependencyException;
 use Omega\Container\Exceptions\NotFoundException;
 use Omega\Http\RequestFactory;
 use Omega\Application\Application;
-use Omega\Http\HttpKernel;
+use Omega\Http\Http;
 
 if (file_exists($maintenance = dirname(__DIR__) . '/storage/app/maintenance.php')) {
     require $maintenance;
@@ -22,10 +22,10 @@ $app = require_once dirname(__DIR__) . '/bootstrap/app.php';
 /**
  * Declare http kernel.
  *
- * @var HttpKernel $kernel
+ * @var Http $kernel
  */
 try {
-    $kernel = $app->make(HttpKernel::class);
+    $kernel = $app->make(Http::class);
 } catch (DependencyException|NotFoundException $e) {
 
 }

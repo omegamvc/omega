@@ -3,7 +3,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controllers;
+namespace App\Http\Controllers;
 
 use Omega\Http\Response;
 
@@ -12,9 +12,9 @@ use function file_exists;
 use function method_exists;
 use function str_replace;
 
-class ApiController extends Controller
+class ApiController extends AbstractController
 {
-    public function index(string $unit, string $action, string $version): Response
+    public function handle(string $unit, string $action, string $version): Response
     {
         /** @var array<string, int|string|array<string, string>> $api */
         $api = $this->getService($unit, $action, $version);

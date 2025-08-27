@@ -2,32 +2,24 @@
 
 declare(strict_types=1);
 
-use App\Exceptions\Handler;
-use App\Kernels\ConsoleKernel;
-use App\Kernels\Web;
 use Omega\Application\Application;
+use Omega\Console\Console;
+use Omega\Console\ConsoleError;
 use Omega\Exceptions\ExceptionHandler;
-use Omega\Http\HttpKernel;
-use Omega\Console\ApplicationConsole;
+use Omega\Http\Http;
+use Omega\Http\HttpError;
 use Omega\Support\Env;
 
 Env::load(dirname(__DIR__));
 
-$app = new Application(dirname(__DIR__));
+try {
+    $app = new Application(dirname(__DIR__));
 
-$app->set(
-    HttpKernel::class,
-    fn() => new Web($app)
-);
+    $app->set(Http::class, fn() => new HttpError($app));
+    $app->set(Console::class, fn () => new ConsoleError($app));
+    $app->set(ExceptionHandler::class, fn () => new ExceptionHandler($app));
 
-$app->set(
-    ApplicationConsole::class,
-    fn () => new ConsoleKernel($app)
-);
+    return $app;
+} catch (Exception $e) {
 
-$app->set(
-    ExceptionHandler::class,
-    fn () => new Handler($app)
-);
-
-return $app;
+}

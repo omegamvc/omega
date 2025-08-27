@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Commands\CronCommand;
-use App\Commands\HelpCommand;
 use Omega\Console\Commands\ClearCacheCommand;
 use Omega\Console\Commands\ConfigCommand;
+use Omega\Console\Commands\CronCommand;
+use Omega\Console\Commands\HelpCommand;
 use Omega\Console\Commands\MaintenanceCommand;
 use Omega\Console\Commands\MakeCommand;
 use Omega\Console\Commands\MigrationCommand;
