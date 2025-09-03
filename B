@@ -1,0 +1,790 @@
+Inizio con la classe Dotenv che non sembra avere moltissime responsabilità.
+
+Non ti mostro le eccezioni, le interfacce e la directory Option perché è un porting di phpoptin.
+
+```
+class Dotenv
+{
+  private $reader, $loader, $parser, $backup;
+
+  /**
+   *
+   * @param \Dotenv\Reader\ReaderInterface $reader [required]
+   * @param \Dotenv\Loader\LoaderInterface $loader [required]
+   * @param \Dotenv\Parser\ParserInterface $parser [required]
+   * @param \Dotenv\Backup\BackupInterface $backup [required]
+   *
+   * @return void
+   */
+  public function __construct(ReaderInterface $reader, LoaderInterface $loader, ParserInterface $parser, BackupInterface $backup)
+  {
+    $this->reader = $reader;
+    $this->loader = $loader;
+    $this->parser = $parser;
+    $this->backup = $backup;
+  }
+
+  /**
+   *
+   * @param string|string[]      $paths        [required]
+   * @param string|string[]|null $names        [optional]
+   * @param bool                 $shortCircuit [optional]
+   * @param string|null          $fileEncoding [optional]
+   *
+   * @return \Dotenv\Dotenv
+   */
+  public static function process($paths, $names = null, bool $shortCircuit = true, ?string $fileEncoding = null)
+  {
+    return self::create(Backup::create(), $paths, $names, $shortCircuit, $fileEncoding);
+  }
+
+  /**
+   *
+   * @param \Dotenv\Backup\BackupInterface $backup       [required]
+   * @param string|string[]                $paths        [required]
+   * @param string|string[]|null           $names        [optional]
+   * @param bool                           $shortCircuit [optional]
+   * @param string|null                    $fileEncoding [optional]
+   *
+   * @return \Dotenv\Dotenv
+   */
+  public static function create(BackupInterface $backup, $paths, $names = null, bool $shortCircuit = true, ?string $fileEncoding = null)
+  {
+    ($reader = ($names===null ? StoreBuilder::createWithName() : StoreBuilder::createWithoutName())
+      ->addPath($paths)
+      ->addName($names)
+      ->shortCircuit($shortCircuit));
+    return new self($reader->fileEncoding($fileEncoding)->store(), new Loader(), new Parser(), $backup);
+  }
+
+  /**
+   *
+   * @return array
+   */
+  public function load()
+  {
+    $entries = $this->parser->parse($this->reader->read());
+    $this->loader->load($this->backup, $entries);
+    return $entries;
+  }
+
+  /**
+   *
+   * @param string $content [required]
+   * @return array
+   */
+  public function parse(string $content)
+  {
+    $entries = $this->parser->parse($content);
+    $this->loader->load($this->backup, $entries);
+    return $entries;
+  }
+
+  /**
+   *
+   * @return array
+   */
+  public function safeLoad()
+  {
+    try {
+      return $this->load();
+    } catch (InvalidPathException $e) {
+      // suppressing exception
+      return [];
+    }
+  }
+
+  /**
+   *
+   * @param string|string[] $variables [required]
+   * @return \Dotenv\Validator\Validator
+   */
+  public function ifPresent($variables)
+  {
+    return new Validator($this->backup, (array) $variables);
+  }
+
+  /**
+   *
+   * @param string|string[] $variables [required]
+   *
+   * @throws \Dotenv\Exception\ValidationException
+   *
+   * @return \Dotenv\Validator\Validator
+   */
+  public function required($variables)
+  {
+    return (new Validator($this->backup, (array) $variables))->required();
+  }
+}
+```
+
+```
+// Backup.php
+final class Backup implements BackupInterface
+{
+  private $parser;
+  private $variables;
+  public function __construct(array $variables, ParserInterface $parser)
+  {
+    $this->variables = $variables;
+    $this->parser = $parser;
+  }
+
+  private function setEnv(string $name, $value)
+  {
+    if ($this->isSupport()) {
+      \putenv("$name=$value");
+    }
+
+    $_SERVER[$name] = $_ENV[$name] = $value;
+  }
+
+  private function isSupport()
+  {
+    return \function_exists('putenv') && \function_exists('getenv');
+  }
+
+  public static function create()
+  {
+    return new self([], new Parser());
+  }
+
+  public function get(string $name)
+  {
+    return $this->getOrElse($name)->failMap(static function($error) {
+      throw new VarNotFoundException($error);
+    })->done()->get();
+  }
+
+  public function set(string $name, $value)
+  {
+    $this->variables[$name] = $value;
+    $this->setEnv($name, $value);
+    return Resolve::create($this->variables);
+  }
+
+  private function getOrElse(string $name)
+  {
+    return isset($this->variables[$name]) ? Resolve::create($this->variables[$name]) :
+      Reject::create('Try to get undefined environment variable [%s].', \sprintf($name));
+  }
+}
+
+// Loader.php
+final class Loader implements LoaderInterface
+{
+  /**
+   *
+   * @param \Dotenv\Backup\BackupInterface $backup  [required]
+   * @param array                          $entries [required]
+   */
+  public function load(BackupInterface $backup, array $entries)
+  {
+    foreach($entries as $key => $entry) {
+      $backup->set($key, $entry);
+    }
+    return $entries;
+  }
+}
+
+// Entries.php
+final class Entries
+{
+  private const ENV = '/^[\x20]*(\w+)[\x20]*=[\x20]*(?:(["\'`])((?:[^\r\n]|[\r\n])*?)(\2)|([^#\r\n]*))(?!^#)/m';
+
+  private static function combine(array $entries)
+  {
+    // Use to index will force for single line env values
+    $forceIndex = 3;
+    $keys   = $entries[1];
+    $values = $entries[5];
+
+    foreach($values as $i => $value) {
+      if ($value == null) {
+        $values[$i] = $entries[$forceIndex][$i];
+      }
+    }
+
+    return Nested::resolve(\array_combine($keys, $values));
+  }
+
+  public static function store(array $lines)
+  {
+    return RegExp::matchAll(self::ENV, \implode("\n", $lines))->failMap(function() {
+      return 'Cannot store environments variables something went wrong.';
+    })->flatMap(static function (array $entries) {
+      return Resolve::create(self::combine($entries));
+    })->failMap(static function(string $error) {
+      throw new InvalidFileException(\sprintf('Failed to parse dotenv file. %s', $error));
+    });
+  }
+}
+
+// Lines.php
+final class Lines
+{
+  private const value = '/(?:=[\x20]*(?:([\'"`])(?:[\r\n]?(.*)?)+?(?=[\r\n\x20]*\w+=)))/m';
+  private const key = '/(?:^\s*(?:(?:[\'"`]+[\w-]+))?(?:[\w-]+[\'"`]+)*\s*=)/m';
+
+  private const comment = '/^\s*#.*/';
+
+  public static function process(array $lines)
+  {
+    return self::validateEnv($lines)->flatMap(static function(array $lines) {
+      return Resolve::create(Entries::store($lines));
+    })->failMap(static function(string $error) {
+      throw new \Error(\sprintf('Failed to parse dotenv file. %s', $error));
+    })->done()->get();
+  }
+
+  private static function filterEnv(array $lines)
+  {
+    return \array_diff($lines, \preg_grep(self::comment, $lines));
+  }
+
+  private static function validateEnv(array $lines)
+  {
+    $error = null;
+    $line = 0;
+
+    RegExp::pregCallback([self::key, self::value], function($matches) use (&$error, &$line, $lines) {
+      if (!isset($matches[2])) {
+        $error = \trim($matches[0]);
+        $line = \array_search($error, $lines);
+        return;
+      }
+
+      $haystack = $matches[2];
+      $needle = $matches[1];
+
+      if (!$error && $haystack && $needle && !\str_ends_with(\trim($haystack), $needle)) {
+        $error = $haystack;
+        $line = \array_search($haystack, $lines);
+        return;
+      }
+    }, \implode("\n", $lines)."\nDEBUG=");
+
+    return $error !== null ?
+      Reject::create(\sprintf('Encountered unexpected env syntax [%s] at Index: [%d]', $error, $line + 1)) : Resolve::create(self::filterEnv($lines));
+  }
+}
+
+// Nested.php
+final class Nested
+{
+  private const NESTED = '/^(?<!\\\\)\\$\\{\\s*([^\\{\\}\\s]+)\\s*\\}$/';
+
+  /**
+   *
+   * @param array $entries [required]
+   *
+   * @throws \Dotenv\Exception\VarNotFoundException
+   *
+   * @return array Nested entries
+   */
+  public static function resolve(array $entries)
+  {
+    $entries = Option::fromValue($entries, false);
+    return $entries->flatMap(static function(array $entries) {
+      return self::process($entries)->failMap(static function(string $error) {
+        throw new VarNotFoundException($error);
+      })->done();
+    })->get();
+  }
+
+  /**
+   *
+   * @param array $entries [required]
+   *
+   * @return \Dotenv\Option\Option<string>
+   */
+  private static function process(array $entries)
+  {
+    foreach($entries as $i => $entry) {
+      if (($keys = RegExp::match(self::NESTED, $entry, true)->done()->get()) && $keys !== []) {
+        $key = $keys[1];
+        if (!isset($entries[$key])) {
+          return Reject::create(
+            \sprintf('Failed to parse undefined environment variable [%s].', $key)
+          );
+        }
+        $entries[$i] = \preg_replace(self::NESTED, $entries[$key], $entry);
+      }
+    }
+    return Resolve::create($entries);
+  }
+}
+
+// Parser.php
+final class Parser implements ParserInterface
+{
+  /**
+   *
+   * @param string $content [required]
+   *
+   * @return
+   */
+  public function parse(string $content)
+  {
+    return RegExp::split("/(\r\n|\n|\r)/", $content)->failMap(function() {
+      return 'Could not split into separate lines.';
+    })->flatMap(static function(array $lines) {
+      return Lines::process($lines);
+    })->failMap(static function (string $error) {
+      throw new InvalidFileException(\sprintf('Failed to parse dotenv file. %s', $error));
+    })->done()->get();
+  }
+}
+
+// Reader.php
+final class FileReader implements ReaderInterface
+{
+  /**
+   *
+   * @var array
+   */
+  private $filePaths;
+
+  /**
+   *
+   * @var bool
+   */
+  private $shortCircuit;
+
+  /**
+   *
+   * @var string|null
+   */
+  private $fileEncoding;
+
+  /**
+   *
+   * @param array       $filePaths    [required]
+   * @param bool        $shortCircuit [required]
+   * @param string|null $fileEncoding [required]
+   *
+   * @return void
+   */
+  public function __construct(array $filePaths, bool $shortCircuit, ?string $fileEncoding)
+  {
+    $this->filePaths = $filePaths;
+    $this->shortCircuit = $shortCircuit;
+    $this->fileEncoding = $fileEncoding;
+  }
+
+  /**
+   *
+   * @throws \Dotenv\Exception\InvalidPathException|\Dotenv\Exception\InvalidEncodingException
+   * @return string
+   */
+  public function read()
+  {
+    if ($this->filePaths === []) {
+      throw new InvalidPathException('Faild Loading At least one environment file path must be provided.');
+    }
+
+    $contents = Reader::read($this->filePaths, $this->shortCircuit, $this->fileEncoding);
+
+    if (\count($contents) > 0) {
+      return \implode("\n", $contents);
+    }
+
+    throw new InvalidPathException(
+      \sprintf('Unable to read any of the environment file(s) at [%s].', \implode(', ', $this->filePaths))
+    );
+  }
+}
+
+// FileReader.php
+final class Reader
+{
+  /**
+   *
+   * @param array       $filePaths    [required]
+   * @param bool        $shortCircuit [required]
+   * @param string|null $fileEncoding [required]
+   *
+   * @throws \Dotenv\Exception\InvalidEncodingException
+   *
+   * @return array<string,string>
+   */
+  public static function read(array $filePaths, bool $shortCircuit, ?string $fileEncoding) : array
+  {
+    $output = [];
+
+    foreach($filePaths as $filePath) {
+      $content = self::readFromFile($filePath, $fileEncoding);
+      if ($content->isDefined()) {
+        $output[$filePath] = $content->get();
+        if ($shortCircuit) {
+          break;
+        }
+      }
+    }
+
+    return $output;
+  }
+
+  /**
+   *
+   * @param string      $filePath     [required]
+   * @param string|null $fileEncoding [required]
+   *
+   * @throws \Dotenv\Exception\InvalidEncodingException
+   *
+   * @return \Dotenv\Option\Option<string>
+   */
+  private static function readFromFile(string $filePath, ?string $encoding)
+  {
+    $content = Option::fromValue(@\file_get_contents($filePath), false);
+    return $content->flatMap(static function(string $content) use ($encoding) {
+      return Convert::utf8($content, $encoding)->failMap(static function (string $error) {
+        throw new InvalidEncodingException($error);
+      })->done();
+    });
+  }
+}
+
+// StoreBuilder.php
+final class StoreBuilder
+{
+  /**
+   *
+   * @var string
+   */
+  private const DEFAULT_ENV = '.env';
+
+  /**
+   *
+   * @var array
+   */
+  private $paths;
+
+  /**
+   *
+   * @var array
+   */
+  private $names;
+
+  /**
+   *
+   * @var bool
+   */
+  private $shortCircuit;
+
+  /**
+   *
+   * @var string|null
+   */
+  private $fileEncoding;
+
+  /**
+   *
+   * @param array  $paths        [optional]
+   * @param array  $names        [optional]
+   * @param bool   $shortCircuit [optional]
+   * @param string $fileEncoding [optional]
+   *
+   * @return void
+   */
+  public function __construct(array $paths = [], array $names = [], bool $shortCircuit = false, ?string $fileEncoding = null)
+  {
+    $this->paths = $paths;
+    $this->names = $names;
+    $this->shortCircuit = $shortCircuit;
+    $this->fileEncoding = $fileEncoding;
+  }
+
+  /**
+   *
+   * @param string|string[]|null $values
+   * @param string               $target
+   *
+   * @return \Dotenv\Reader\StoreBuilder
+   */
+  private function mergeWith($values, $target)
+  {
+    foreach((array) $values as $value) {
+      $this->$target = \array_merge($this->$target, [$value]);
+    }
+    return new self($this->paths, $this->names, $this->shortCircuit, $this->fileEncoding);
+  }
+
+  /**
+   *
+   * @return \Dotenv\Reader\StoreBuilder
+   */
+  public static function createWithName()
+  {
+    return new self([], [self::DEFAULT_ENV]);
+  }
+
+  /**
+   *
+   * @return \Dotenv\Reader\StoreBuilder
+   */
+  public static function createWithoutName()
+  {
+    return new self();
+  }
+
+  /**
+   *
+   * @param string|null $fileEncoding [required]
+   * @return \Dotenv\Reader\StoreBuilder
+   */
+  public function fileEncoding(?string $fileEncoding)
+  {
+    return new self($this->paths, $this->names, $this->shortCircuit, $fileEncoding);
+  }
+
+  /**
+   *
+   * @param string|string[] $paths [required]
+   * @return \Dotenv\Reader\StoreBuilder
+   */
+  public function addPath($paths)
+  {
+    return $this->mergeWith($paths, 'paths');
+  }
+
+  /**
+   *
+   * @param string|string[]|null $names [optional]
+   * @return \Dotenv\Reader\StoreBuilder
+   */
+  public function addName($names)
+  {
+    return $this->mergeWith($names, 'names');
+  }
+
+  /**
+   *
+   * @param bool $shortCircuit [optional]
+   * @return \Dotenv\Reader\StoreBuilder
+   */
+  public function shortCircuit(bool $shortCircuit = false)
+  {
+    return new self($this->paths, $this->names, $shortCircuit, $this->fileEncoding);
+  }
+
+  /**
+   *
+   * @return \Dotenv\Reader\ReaderInterface
+   */
+  public function store()
+  {
+    return new FileReader(Path::combine($this->paths, $this->names), $this->shortCircuit, $this->fileEncoding);
+  }
+}
+
+// Reject.php
+final class Reject extends Result
+{
+  private $value;
+
+  public function __construct($value)
+  {
+    $this->value = $value;
+  }
+
+  public static function create($value)
+  {
+    return new self($value);
+  }
+
+  public function map(callable $callable)
+  {
+    return self::create($this->value);
+  }
+
+  public function fail()
+  {
+    return Some::create($this->value);
+  }
+
+  public function done()
+  {
+    return None::create();
+  }
+
+  public function flatMap(callable $callable)
+  {
+    return self::create($this->value);
+  }
+
+  public function failMap(callable $callable)
+  {
+    return self::create($callable($this->value));
+  }
+}
+
+// Resolve.php
+final class Resolve extends Result
+{
+  private $value;
+
+  public function __construct($value)
+  {
+    $this->value = $value;
+  }
+
+  public static function create($value)
+  {
+    return new self($value);
+  }
+
+  public function map(callable $callable)
+  {
+    return self::create($callable($this->value));
+  }
+
+  public function fail()
+  {
+    return None::create();
+  }
+
+  public function done()
+  {
+    return Some::create($this->value);
+  }
+
+  public function flatMap(callable $callable)
+  {
+    return $callable($this->value);
+  }
+
+  public function failMap(callable $callable)
+  {
+    return self::create($this->value);
+  }
+}
+
+// Result.php
+abstract class Result
+{
+  abstract public function done();
+  abstract public function fail();
+
+  abstract public function flatMap(callable $callable);
+
+  abstract public function map(callable $callable);
+
+  abstract public function failMap(callable $callable);
+}
+
+// Convert.php
+{
+  /**
+   *
+   * @param string      $input    [required]
+   * @param string|null $encoding [required]
+   *
+   * @return \Dotenv\Handler\Reject|\Dotenv\Handler\Resolve
+   */
+  public static function utf8(string $input, ?string $encoding = null)
+  {
+    if ($encoding !== null && !\in_array($encoding, \mb_list_encodings(), true)) {
+      return Reject::create(\sprintf('Illegal character encoding [%s] specified.', $encoding));
+    }
+
+    $converted = $encoding === null ? @\mb_convert_encoding($input, 'UTF-8') :
+      @\mb_convert_encoding($input, 'UTF-8', $encoding);
+
+    if (\substr($converted, 0, 3) == "\xEF\xBB\xBF") ($converted = \substr($converted, 3));
+    return Resolve::create($converted);
+  }
+}
+
+// Regex.php
+final class RegExp
+{
+  public static function matchAll($pattern, $subject, bool $returnMatches = true)
+  {
+    return self::pregWithWrap(static function(string $subject) use ($pattern, $returnMatches) {
+      $matched = @\preg_match_all($pattern, $subject, $matches);
+      return $returnMatches ? $matches : $matched;
+    }, $subject);
+  }
+
+  public static function pregCallback($pattern, $callable, $subject)
+  {
+    return self::pregWithWrap(static function(string $subject) use ($pattern, $callable) {
+      return @\preg_replace_callback($pattern, $callable, $subject);
+    }, $subject);
+  }
+
+  public static function split(string $pattern, string $subject)
+  {
+    return self::pregWithWrap(static function(string $subject) use ($pattern) {
+      /** @var string[] */
+      return (array) @\preg_split($pattern, $subject);
+    }, $subject);
+  }
+
+  public static function match(string $pattern, string $subject, bool $returnMatches = false)
+  {
+    return self::pregWithWrap(static function(string $subject) use ($pattern, $returnMatches) {
+      $matched = (int) @\preg_match($pattern, $subject, $matches);
+      return $returnMatches ? $matches : $matched;
+    }, $subject);
+  }
+
+  /**
+   * Perform a preg operation, wrapping up the result.
+   *
+   * @param callable $operation
+   * @param string $subject
+   *
+   * @return \Dotenv\Resolver\Result<V,string>
+   */
+  public static function pregWithWrap(callable $operation, string $subject)
+  {
+    $result = $operation($subject);
+
+    return \preg_last_error() !== \PREG_NO_ERROR ?
+      Reject::create(\preg_last_error_msg()) : Resolve::create($result);
+  }
+}
+
+// Validator.php
+final class Validator
+{
+  private $repository;
+  private $variables;
+
+  public function __construct(BackupInterface $repository, array $variables)
+  {
+    $this->repository = $repository;
+    $this->variables = $variables;
+  }
+
+  public function required()
+  {
+    return $this->assert(
+      static function(?string $value) {
+        return $value !== null;
+      },
+      'is missing.'
+    );
+  }
+
+  public function assert(callable $callable, string $message)
+  {
+    $failure = [];
+    foreach($this->variables as $variable) {
+      if ($callable($this->repository->get($variable)) === false) {
+        $failure[] = \sprintf('%s %s', $variable, $message);
+      }
+    }
+
+    if (\count($failure) > 0) {
+      throw new ValidationException(\sprintf(
+        'One or more environment variables failed assertions: %s.',
+        \implode(', ', $failing)
+      ));
+    }
+  }
+}
+```
