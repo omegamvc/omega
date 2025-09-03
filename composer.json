@@ -23,7 +23,6 @@
     ],
     "require": {
         "php": "^8.4",
-        "ext-apache": "*",
         "ext-apcu": "*",
         "ext-http": "*",
         "ext-iconv": "*",
@@ -52,6 +51,9 @@
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ]
+    },
+    "suggest": {
+		"ext-apache": ""
     },
     "config": {
         "optimize-autoloader": true,
