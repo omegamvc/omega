@@ -53,7 +53,7 @@
         ]
     },
     "suggest": {
-		"ext-apache": ""
+		"ext-apache": "If you want to use apache extension"
     },
     "config": {
         "optimize-autoloader": true,
