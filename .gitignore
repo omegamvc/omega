@@ -20,6 +20,8 @@ package-lock.json
 yarn.lock
 pnpm-lock.yaml
 composer.lock
+phpcs.xml
+phpdoc.xml
 
 # Visual Studio Code configs
 /.vscode
