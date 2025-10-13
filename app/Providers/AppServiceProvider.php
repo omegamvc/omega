@@ -22,9 +22,7 @@ class AppServiceProvider extends AbstractServiceProvider
     public function boot(): void
     {
         // error handle
-        $this->app->set('error.handle', fn () => new Run());
-        $this->app->set('error.PrettyPageHandler', fn () => new PrettyPageHandler());
-        $this->app->set('error.PlainTextHandler', fn () => new PlainTextHandler());
+        $this->registerErrorHandle();
 
         // register schedule to container
         $this->app->set('cron.log', fn (): Log => new Log());
@@ -32,6 +30,15 @@ class AppServiceProvider extends AbstractServiceProvider
 
         // hash
         $this->registerHash();
+    }
+
+    private function registerErrorHandle(): void
+    {
+        if ($this->app->isDebugMode() && class_exists(Run::class)) {
+            $this->app->set('error.handle', fn () => new Run());
+            $this->app->set('error.PrettyPageHandler', fn () => new PrettyPageHandler());
+            $this->app->set('error.PlainTextHandler', fn () => new PlainTextHandler());
+        }
     }
 
     private function registerHash(): void
