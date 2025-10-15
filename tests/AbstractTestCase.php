@@ -4,14 +4,18 @@ declare(strict_types=1);
 
 namespace Tests;
 
-use Omega\Testing\TestCase as IntegrateTestCase;
+use Omega\Application\Application;
+use Omega\Testing\TestCase;
 
-abstract class AbstractTestCase extends IntegrateTestCase
+abstract class AbstractTestCase extends TestCase
 {
-    use CreateApplicationTrait;
-
     protected function setUp(): void
     {
-        $this->app = $this->createApplication();
+        parent::setUp();
+
+        $this->app = require dirname(__DIR__) . '/bootstrap/app.php';
+
+        //$app = require dirname(__DIR__) . '/bootstrap/app.php';
+        //var_dump($app);
     }
 }

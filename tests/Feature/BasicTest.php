@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use Tests\AbstractTestCase;
-use Throwable;
+use Throwble;
 
 final class BasicTest extends AbstractTestCase
 {
@@ -20,5 +20,11 @@ final class BasicTest extends AbstractTestCase
         $this
             ->get('/')
             ->assertOk();
+    }
+
+    protected function tearDown(): void
+    {
+		restore_error_handler();
+		restore_exception_handler();
     }
 }
