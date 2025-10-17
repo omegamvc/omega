@@ -21,5 +21,4 @@ try {
 
     return $app;
 } catch (Exception $e) {
-
 }

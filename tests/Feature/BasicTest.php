@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use Tests\AbstractTestCase;
-use Throwble;
+use Throwable;
 
 final class BasicTest extends AbstractTestCase
 {
@@ -24,7 +24,7 @@ final class BasicTest extends AbstractTestCase
 
     protected function tearDown(): void
     {
-		restore_error_handler();
-		restore_exception_handler();
+        restore_error_handler();
+        restore_exception_handler();
     }
 }

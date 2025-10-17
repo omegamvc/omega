@@ -12,15 +12,15 @@ use Omega\Http\Response;
 use Omega\Support\Vite;
 use Omega\View\Templator;
 use Omega\View\Templator\DirectiveTemplator;
-
 use Omega\View\TemplatorFinder;
+
 use function array_merge;
 
 class ViewServiceProvider extends AbstractServiceProvider
 {
     /**
      * @throws DependencyException
-     * @throws NotFoundException|
+     * @throws NotFoundException
      * @throws InvalidDefinitionException
      */
     public function boot(): void
@@ -37,6 +37,9 @@ class ViewServiceProvider extends AbstractServiceProvider
         $this->app->set('vite.hasManifest', fn (): bool => file_exists($this->app->get('vite.location')));
     }
 
+    /**
+     * @throws InvalidDefinitionException
+     */
     protected function registerViteDirectives(): void
     {
         if ($this->app->has('vite.gets')) {
@@ -50,19 +53,25 @@ class ViewServiceProvider extends AbstractServiceProvider
 
     /**
      * @throws NotFoundException
-     * @throws DependencyException|
+     * @throws DependencyException
      * @throws InvalidDefinitionException
      */
     protected function registerViewResolver(): void
     {
         $globalTemplateVar = [
             'vite_has_manifest' => $this->app->get('vite.hasManifest'),
-            'vite_hmr_script'   => $this->app->get('vite.gets')->isRunningHRM() ? $this->app->get('vite.gets')->getHmrScript() : '',
+            'vite_hmr_script'   => $this->app->get('vite.gets')
+                ->isRunningHRM()
+                ? $this->app->get('vite.gets')->getHmrScript()
+                : '',
         ];
         $extensions = $this->app->get('config')['VIEW_EXTENSIONS'] ?? [];
 
         $this->app->set(TemplatorFinder::class, fn () => new TemplatorFinder(get_path('paths.view'), $extensions));
-        $this->app->set('view.instance', fn () => new Templator($this->app->get(TemplatorFinder::class), get_path('path.compiled_view_path')));
+        $this->app->set(
+            'view.instance',
+            fn () => new Templator($this->app->get(TemplatorFinder::class), get_path('path.compiled_view_path'))
+        );
         $this->app->set(
             'view.response',
             fn () => fn (string $view, array $data = []): Response => new Response(

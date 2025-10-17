@@ -1,6 +1,5 @@
 <?php
 
-
 declare(strict_types=1);
 
 namespace App\Http\Controllers;
@@ -40,17 +39,17 @@ class ApiController extends AbstractController
     /**
      * @return array<string, mixed>
      */
-    protected function getService(string $serviceName, string $methodNama, string $version): array
+    protected function getService(string $serviceName, string $methodName, string $version): array
     {
         $serviceName .= 'Service';
         $serviceName = str_replace('-', '', $serviceName);
-        $methodNama  = str_replace('-', '_', $methodNama);
+        $methodName  = str_replace('-', '_', $methodName);
 
         if (file_exists(get_path('path.services', $serviceName . '.php'))) {
             $service = new $serviceName();
-            if (method_exists($service, $methodNama)) {
+            if (method_exists($service, $methodName)) {
                 /** @var array<string, mixed> $resultWrap*/
-                $resultWrap = app()->call([$service, $methodNama], ['version' => $version]);
+                $resultWrap = app()->call([$service, $methodName], ['version' => $version]);
 
                 return $resultWrap;
             }

@@ -46,7 +46,7 @@ class RateLimiterServiceProvider extends AbstractServiceProvider
             limiter: $rate->createFixedWindow(
                 limit: 60,
                 windowSeconds: 60,
-            ))
-        );
+            )
+        ));
     }
 }

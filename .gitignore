@@ -21,8 +21,8 @@ yarn.lock
 pnpm-lock.yaml
 composer.lock
 phpcs.xml
-phpdoc.xml
 phpunit.xml
+phpstan.neon
 
 # Visual Studio Code configs
 /.vscode

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Middlewares\AppMiddleware;
+use Exception;
 use Omega\Http\JsonResponse;
 use Omega\Router\Attribute\Middleware;
 use Omega\Router\Attribute\Name;
@@ -13,6 +14,9 @@ use Omega\Router\Attribute\Route\Get;
 #[Middleware([AppMiddleware::class])]
 final class IndexService
 {
+    /**
+     * @throws Exception
+     */
     #[Name('api.v1.index')]
     #[Get('/index')]
     public function index(): JsonResponse

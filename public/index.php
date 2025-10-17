@@ -26,8 +26,7 @@ $app = require_once dirname(__DIR__) . '/bootstrap/app.php';
  */
 try {
     $kernel = $app->make(Http::class);
-} catch (DependencyException|NotFoundException $e) {
-
+} catch (DependencyException | NotFoundException $e) {
 }
 
 /**

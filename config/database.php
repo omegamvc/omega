@@ -51,7 +51,10 @@ return [
             ],
             'sqlite' => [
                 'driver'   => 'sqlite',
-                'database' => DIRECTORY_SEPARATOR . 'database' . DIRECTORY_SEPARATOR . (env('DB_DATABASE', 'database.sqlite')),
+                'database' => DIRECTORY_SEPARATOR
+                    . 'database'
+                    . DIRECTORY_SEPARATOR
+                    . env('DB_DATABASE', 'database.sqlite'),
                 'options'  => [
                     PDO::ATTR_CASE               => PDO::CASE_NATURAL,
                     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
@@ -61,5 +64,5 @@ return [
                 ],
             ],
         ],
-   ],
+    ],
 ];

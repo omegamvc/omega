@@ -14,8 +14,5 @@ abstract class AbstractTestCase extends TestCase
         parent::setUp();
 
         $this->app = require dirname(__DIR__) . '/bootstrap/app.php';
-
-        //$app = require dirname(__DIR__) . '/bootstrap/app.php';
-        //var_dump($app);
     }
 }

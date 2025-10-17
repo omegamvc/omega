@@ -15,7 +15,7 @@
 # Omega Starter Application
 Welcome to **omega**, a minimal MVC framework designed to streamline your PHP development process. This lightweight framework offers essential features for building web applications while maintaining simplicity and ease of use.
 
-## Feature
+## 🪐 Feature
 - MVC structure
 - Application Container (power with [php-di](https://github.com/PHP-DI/PHP-DI))
 - Router Support
@@ -25,122 +25,150 @@ Welcome to **omega**, a minimal MVC framework designed to streamline your PHP de
 - Service Provider and Middleware
 - Templator (template engine)
 
-## Getting Started in 4 Simple Steps
+## Quick Start (4 Steps)
 
-**Create Your Application**:
-
+### 1 Create Your Project
 ```bash
 composer create-project omegamvc/omega project-name
 ```
 
-**Navigate to Your Project**:
-
+### 2️ Jump In
 ```bash
 cd project-name
 ```
 
-**Build Your Assets**:
-
+### 3️ Build Assets
 ```bash
 npm install
 npm run build
 ```
 
-**Serve Your Application**:
-
+### 4️ Launch!
 ```bash
-php cli serve
+php omega serve
 ```
 
-## Additional Features ✨
+**That's it!** Your app is now running. Let's build something awesome.
 
-### CLI Commands for Building Your App
 
+## Building Your First Feature
+
+We'll create a user profile feature from scratch.
+
+### Step 1: Create Database Schema
 ```bash
-# Create migration schema
-php cli make:migration profiles
-php cli db:create # skip if database already exists
-php cli migrate
-
-# Create a model
-php cli make:model Profile --table-name profiles
-
-# Create controller (or API services)
-php cli make:controller Profile
-php cli make:services Profile
-
-# Presenter for HTML response
-php cli make:view profile
+php omega make:migration profiles
+php omega db:create  # Only if database doesn't exist yet
 ```
 
-### Example Code Snippets
-
-#### Migration Schema
+Define your table structure:
 ```php
-// database/migration/<timestamp>_profile.php
-
+// database/migration/<timestamp>_profiles.php
 Schema::table('profiles', function (Create $column) {
     $column('user')->varChar(32);
     $column('real_name')->varChar(100);
-
     $column->primaryKey('user');
-});
+})
 ```
 
-#### Controller
+Run the migration:
+```bash
+php omega migrate
+```
+
+### Step 2: Generate Your Model
+```bash
+php omega make:model Profile --table-name profiles
+```
+
+### Step 3: Create a Controller
+```bash
+php omega make:controller Profile
+```
+
+Add your logic:
 ```php
 // app/Controller/ProfileController.php
-
-public function index(MyPDO $pdo): Response
+public function handle(MyPDO $pdo): Response
 {
-    return view('profiles', [
-        'name' => Profile::find('YOU_NAME', $pdo)->real_name
+    return view('profile', [
+        'name' => Profile::find('omegamvc', $pdo)->real_name
     ]);
 }
 ```
 
-#### Services (rest api out of the box)
-Api ready to go `http://localhost:8080/api/profile/index`.
-```php
-// app/services/ProfileServices.php
-
-public function index(MyPDO $pdo): array
-{
-    return [
-        'name'   => Profile::find('YOUR_NAME', $pdo)->real_name,
-        'status' => 200,
-        'header' => []
-    ];
-}
+### Step 4: Design Your View
+```bash
+php omega make:view profile
 ```
 
-#### View
 ```php
 // resources/views/profile.template.php
-
 {% extend('base/base.template.php') %}
-
-{% section('title', 'hay {{ $name }}') %}
+{% section('title', 'Welcome {{ $name }}') %}
 
 {% section('content') %}
-<p>{{ $name }}</p>
+    <h1>Hello, {{ $name }}! 👋</h1>
 {% endsection %}
 ```
 
-### Router Configuration
+### Step 5: Register Your Route
 ```php
 // route/web.php
-
-Router::get('/profile', Profile::class);
+Router::get('/profile', [ProfileController::class, 'index']);
 ```
 
-### Optimize
-Optimize by cached Application.
+**Done!** Visit `/profile` and see your work in action.
+
+
+## 🔥 Pro Move: API with Attributes
+
+Skip the route files entirely. Use attributes for clean, self-documented APIs:
+
 ```bash
-# cache view compiler
-php cli view:cache
-# cache application config
-php cli config:cache
+php omega make:services Profile
+```
+
+```php
+// app/Services/ProfileServices.php
+#[Get('/api/v1/profile')]
+#[Name('api.v1.profile')]
+#[Middleware([AuthMiddleware::class])]
+public function index(MyPDO $pdo): array
+{
+    $data = Cache::remember('profile', 3600, fn () => [
+        'name'   => Profile::find('omegamvc', $pdo)->real_name,
+        'status' => 200,
+    ]);
+
+    return JsonResponse($data);
+}
+```
+then register this route attribute.
+```php
+Router::register([
+    ProfileServices::class,
+    // add more class
+]);
+```
+
+This automatically creates your route with middleware—no extra configuration needed!
+
+**Equivalent traditional route:**
+```php
+Route::get('/api/v1/profile', [ProfileServices::class, 'index'])
+    ->name('api.v1.profile')
+    ->middleware([AuthMiddleware::class]);
+```
+
+## ⚡ Performance Optimization
+
+Ready for production? Cache everything:
+
+```bash
+php omegamvc view:cache    # Cache compiled templates
+php omegamvc config:cache  # Cache configuration
+php omegamvc route:cache   # Cache all routes
 ```
 
 ## Official Documentation
