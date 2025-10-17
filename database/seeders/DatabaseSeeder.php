@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use Omega\Database\Seeder\Seeder;
+use Omega\Database\Seeder\AbstractSeeder;
 
-class DatabaseSeeder extends Seeder
+class DatabaseSeeder extends AbstractSeeder
 {
     public function run(): void
     {
