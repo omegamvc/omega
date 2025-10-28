@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use Omega\Cache\CacheManager;
+use Omega\Cache\CacheFactory;
 use Omega\Container\Definition\Exceptions\InvalidDefinitionException;
 use Omega\Container\Exceptions\DependencyException;
 use Omega\Container\Exceptions\NotFoundException;
@@ -32,7 +32,7 @@ class RateLimiterServiceProvider extends AbstractServiceProvider
      */
     protected function registerRateLimiterResolver(): void
     {
-        /** @var CacheManager $cache */
+        /** @var CacheFactory $cache */
         $cache   = $this->app->get('cache');
         $rate    = new RateLimiterFactory($cache);
 
@@ -42,7 +42,7 @@ class RateLimiterServiceProvider extends AbstractServiceProvider
     protected function registerThrottleMiddleware(): void
     {
         $rate = $this->app[RateLimiterFactory::class];
-        $this->app->set(ThrottleMiddleware::class, fn () => new ThrottleMiddleware(
+        $this->app->set(ThrottleMiddleware::class, fn() => new ThrottleMiddleware(
             limiter: $rate->createFixedWindow(
                 limit: 60,
                 windowSeconds: 60,
