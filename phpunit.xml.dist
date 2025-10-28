@@ -14,7 +14,7 @@
          colors="true"
 >
     <testsuites>
-        <testsuite name="OmegaMVC">
+        <testsuite name="Omega Test Suite">
             <directory>./tests</directory>
         </testsuite>
     </testsuites>
