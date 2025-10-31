@@ -34,3 +34,4 @@ phpstan.neon
 npm-debug.log
 yarn-error.log
 /docs/
+/REFACTORING_NOTES.md
