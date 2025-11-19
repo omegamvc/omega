@@ -21,8 +21,12 @@ class RouteServiceProvider extends AbstractServiceProvider
     public function boot(): void
     {
         if (file_exists($cache = $this->app->getApplicationCachePath() . 'route.php')) {
-            $routes = (array) require $cache;
+            $routes = require $cache;
+
             foreach ($routes as $route) {
+                if (is_string($route['function']) && str_contains($route['function'], 'SerializableClosure')) {
+                    $route['function'] = unserialize($route['function'])->getClosure();
+                }
                 Router::addRoutes($route);
             }
         } else {
