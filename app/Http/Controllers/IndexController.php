@@ -4,17 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use Omega\Container\Definition\Exceptions\InvalidDefinitionException;
-use Omega\Container\Exceptions\DependencyException;
-use Omega\Container\Exceptions\NotFoundException;
 use Omega\Http\Response;
 
 class IndexController extends AbstractController
 {
     /**
-     * @throws InvalidDefinitionException
-     * @throws DependencyException
-     * @throws NotFoundException
+     * @return Response
      */
     public function handle(): Response
     {

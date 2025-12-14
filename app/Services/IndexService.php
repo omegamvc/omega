@@ -15,6 +15,7 @@ use Omega\Router\Attribute\Route\Get;
 final class IndexService
 {
     /**
+     * @return JsonResponse
      * @throws Exception
      */
     #[Name('api.v1.index')]

@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use Omega\Container\Exceptions\BindingResolutionException;
+use Omega\Container\Exceptions\CircularAliasException;
+use Omega\Container\Exceptions\EntryNotFoundException;
 use Omega\Container\Provider\AbstractServiceProvider;
 use Omega\Cron\Log;
 use Omega\Cron\Schedule;
@@ -13,14 +16,23 @@ use Omega\Security\Hashing\BcryptHasher;
 use Omega\Security\Hashing\DefaultHasher;
 use Omega\Security\Hashing\HashManager;
 use Omega\Support\Facades\Config;
+use ReflectionException;
 use Whoops\Handler\PlainTextHandler;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 
+use function class_exists;
 use function Omega\Time\now;
 
 class AppServiceProvider extends AbstractServiceProvider
 {
+    /**
+     * @return void
+     * @throws BindingResolutionException Thrown when resolving a binding fails.
+     * @throws CircularAliasException Thrown when alias resolution loops recursively.
+     * @throws EntryNotFoundException Thrown when no entry exists for the identifier.
+     * @throws ReflectionException Thrown when the requested class or interface cannot be reflected.
+     */
     public function boot(): void
     {
         // error handle
@@ -34,6 +46,12 @@ class AppServiceProvider extends AbstractServiceProvider
         $this->registerHash();
     }
 
+    /**
+     * @throws CircularAliasException Thrown when alias resolution loops recursively.
+     * @throws BindingResolutionException Thrown when resolving a binding fails.
+     * @throws ReflectionException Thrown when the requested class or interface cannot be reflected.
+     * @throws EntryNotFoundException Thrown when no entry exists for the identifier.
+     */
     private function registerErrorHandle(): void
     {
         if ($this->app->isDebugMode() && class_exists(Run::class)) {
@@ -43,16 +61,19 @@ class AppServiceProvider extends AbstractServiceProvider
         }
     }
 
+    /**
+     * @throws CircularAliasException Thrown when alias resolution loops recursively.
+     */
     private function registerHash(): void
     {
         $this->app->set('hash.bcrypt', function (): BcryptHasher {
-            return (new BcryptHasher())
+            return new BcryptHasher()
                 ->setRounds(
                     Config::get('BCRYPT_ROUNDS', 12)
                 );
         });
         $this->app->set('hash.argon', value: function (): ArgonHasher {
-            return (new ArgonHasher())
+            return new ArgonHasher()
                 ->setMemory(1024)
                 ->setTime(2)
                 ->setThreads(2);

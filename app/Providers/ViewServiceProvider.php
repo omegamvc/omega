@@ -4,24 +4,28 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use Omega\Container\Definition\Exceptions\InvalidDefinitionException;
-use Omega\Container\Exceptions\DependencyException;
-use Omega\Container\Exceptions\NotFoundException;
+use Omega\Container\Exceptions\BindingResolutionException;
+use Omega\Container\Exceptions\CircularAliasException;
+use Omega\Container\Exceptions\EntryNotFoundException;
 use Omega\Container\Provider\AbstractServiceProvider;
 use Omega\Http\Response;
 use Omega\Support\Vite;
 use Omega\View\Templator;
 use Omega\View\Templator\DirectiveTemplator;
 use Omega\View\TemplatorFinder;
+use ReflectionException;
 
 use function array_merge;
+use function file_exists;
 
 class ViewServiceProvider extends AbstractServiceProvider
 {
     /**
-     * @throws DependencyException
-     * @throws NotFoundException
-     * @throws InvalidDefinitionException
+     * @return void
+     * @throws BindingResolutionException Thrown when resolving a binding fails.
+     * @throws CircularAliasException Thrown when alias resolution loops recursively.
+     * @throws EntryNotFoundException Thrown when no entry exists for the identifier.
+     * @throws ReflectionException Thrown when the requested class or interface cannot be reflected.
      */
     public function boot(): void
     {
@@ -30,6 +34,10 @@ class ViewServiceProvider extends AbstractServiceProvider
         $this->registerViteDirectives();
     }
 
+    /**
+     * @return void
+     * @throws CircularAliasException Thrown when alias resolution loops recursively.
+     */
     protected function registerViteResolver(): void
     {
         $this->app->set('vite.gets', fn (): Vite => new Vite(get_path('path.public'), '/build/'));
@@ -38,7 +46,8 @@ class ViewServiceProvider extends AbstractServiceProvider
     }
 
     /**
-     * @throws InvalidDefinitionException
+     * @return void
+     * @throws CircularAliasException Thrown when alias resolution loops recursively.
      */
     protected function registerViteDirectives(): void
     {
@@ -52,9 +61,11 @@ class ViewServiceProvider extends AbstractServiceProvider
     }
 
     /**
-     * @throws NotFoundException
-     * @throws DependencyException
-     * @throws InvalidDefinitionException
+     * @return void
+     * @throws BindingResolutionException Thrown when resolving a binding fails.
+     * @throws CircularAliasException Thrown when alias resolution loops recursively.
+     * @throws EntryNotFoundException Thrown when no entry exists for the identifier.
+     * @throws ReflectionException Thrown when the requested class or interface cannot be reflected.
      */
     protected function registerViewResolver(): void
     {

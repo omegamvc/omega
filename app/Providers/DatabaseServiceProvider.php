@@ -4,22 +4,25 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use Omega\Container\Definition\Exceptions\InvalidDefinitionException;
-use Omega\Container\Exceptions\DependencyException;
-use Omega\Container\Exceptions\NotFoundException;
+use Omega\Container\Exceptions\BindingResolutionException;
+use Omega\Container\Exceptions\CircularAliasException;
+use Omega\Container\Exceptions\EntryNotFoundException;
 use Omega\Container\Provider\AbstractServiceProvider;
-use Omega\Database\DatabaseManager;
 use Omega\Database\Connection;
+use Omega\Database\DatabaseManager;
 use Omega\Database\Query\Query;
 use Omega\Database\Schema\Schema;
 use Omega\Database\Schema\SchemaConnection;
+use ReflectionException;
 
 class DatabaseServiceProvider extends AbstractServiceProvider
 {
     /**
-     * @throws DependencyException
-     * @throws NotFoundException
-     * @throws InvalidDefinitionException
+     * @return void
+     * @throws BindingResolutionException Thrown when resolving a binding fails.
+     * @throws CircularAliasException Thrown when alias resolution loops recursively.
+     * @throws EntryNotFoundException Thrown when no entry exists for the identifier.
+     * @throws ReflectionException Thrown when the requested class or interface cannot be reflected.
      */
     public function boot(): void
     {

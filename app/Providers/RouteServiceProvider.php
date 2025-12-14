@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Middlewares\AppMiddleware;
-use Omega\Container\Definition\Exceptions\InvalidDefinitionException;
-use Omega\Container\Exceptions\DependencyException;
-use Omega\Container\Exceptions\NotFoundException;
 use Omega\Container\Provider\AbstractServiceProvider;
 use Omega\Router\Router;
+
+use function file_exists;
+use function is_string;
+use function str_contains;
+use function unserialize;
 
 class RouteServiceProvider extends AbstractServiceProvider
 {
     /**
-     * @throws InvalidDefinitionException
-     * @throws DependencyException
-     * @throws NotFoundException
+     * @return void
      */
     public function boot(): void
     {
