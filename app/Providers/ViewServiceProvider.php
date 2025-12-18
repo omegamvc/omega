@@ -13,6 +13,7 @@ use Omega\Support\Vite;
 use Omega\View\Templator;
 use Omega\View\Templator\DirectiveTemplator;
 use Omega\View\TemplatorFinder;
+use Psr\Container\ContainerExceptionInterface;
 use ReflectionException;
 
 use function array_merge;
@@ -24,6 +25,7 @@ class ViewServiceProvider extends AbstractServiceProvider
      * @return void
      * @throws BindingResolutionException Thrown when resolving a binding fails.
      * @throws CircularAliasException Thrown when alias resolution loops recursively.
+     * @throws ContainerExceptionInterface
      * @throws EntryNotFoundException Thrown when no entry exists for the identifier.
      * @throws ReflectionException Thrown when the requested class or interface cannot be reflected.
      */
@@ -64,6 +66,7 @@ class ViewServiceProvider extends AbstractServiceProvider
      * @return void
      * @throws BindingResolutionException Thrown when resolving a binding fails.
      * @throws CircularAliasException Thrown when alias resolution loops recursively.
+     * @throws ContainerExceptionInterface
      * @throws EntryNotFoundException Thrown when no entry exists for the identifier.
      * @throws ReflectionException Thrown when the requested class or interface cannot be reflected.
      */

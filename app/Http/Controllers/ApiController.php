@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use Omega\Container\Exceptions\BindingResolutionException;
+use Omega\Container\Exceptions\CircularAliasException;
+use Omega\Container\Exceptions\EntryNotFoundException;
 use Omega\Http\Response;
+use ReflectionException;
 
 use function array_key_exists;
 use function file_exists;
@@ -13,6 +17,12 @@ use function str_replace;
 
 class ApiController extends AbstractController
 {
+    /**
+     * @throws CircularAliasException
+     * @throws BindingResolutionException
+     * @throws EntryNotFoundException
+     * @throws ReflectionException
+     */
     public function handle(string $unit, string $action, string $version): Response
     {
         /** @var array<string, int|string|array<string, string>> $api */
@@ -38,6 +48,16 @@ class ApiController extends AbstractController
 
     /**
      * @return array<string, mixed>
+     */
+    /**
+     * @param string $serviceName
+     * @param string $methodName
+     * @param string $version
+     * @return array|array
+     * @throws BindingResolutionException
+     * @throws CircularAliasException
+     * @throws EntryNotFoundException
+     * @throws ReflectionException
      */
     protected function getService(string $serviceName, string $methodName, string $version): array
     {

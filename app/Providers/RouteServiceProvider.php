@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Middlewares\AppMiddleware;
+use Omega\Container\Exceptions\BindingResolutionException;
+use Omega\Container\Exceptions\CircularAliasException;
+use Omega\Container\Exceptions\EntryNotFoundException;
 use Omega\Container\Provider\AbstractServiceProvider;
 use Omega\Router\Router;
+use ReflectionException;
 
 use function file_exists;
 use function is_string;
@@ -17,6 +21,11 @@ class RouteServiceProvider extends AbstractServiceProvider
 {
     /**
      * @return void
+     * @throws BindingResolutionException
+     * @throws BindingResolutionException Thrown when resolving a binding fails.
+     * @throws CircularAliasException Thrown when alias resolution loops recursively.
+     * @throws EntryNotFoundException Thrown when no entry exists for the identifier.
+     * @throws ReflectionException Thrown when the requested class or interface cannot be reflected.
      */
     public function boot(): void
     {
